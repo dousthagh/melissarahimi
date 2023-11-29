@@ -22,4 +22,7 @@ class LevelCategory extends Model
     public function lessons(){
         return $this->hasMany(Lesson::class);
     }
+    public function courses(){
+        return $this->hasMany(Course::class);
+    }
 }
