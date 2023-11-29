@@ -58,10 +58,12 @@
                                                             src="{{route('user_level_category.lesson.files.address', ['key'=>$details->files[$i]->secret_key, 'userLevelCategoryId'=>$userLevelCategoryId, 'private_key'=>$key])}}"/>
                                                     </video>
                                                 @elseif(in_array($details->files[$i]->postfix, ['.png', '.jpeg', '.jpg']))
-                                                    <img
-                                                        class="img img-responsive"
+                                                <a href="{{route('user_level_category.lesson.files.address', ['key'=>$details->files[$i]->secret_key, 'userLevelCategoryId'=>$userLevelCategoryId, 'private_key'=>$key])}}">     
+                                                <img
+                                                        style="width:100% height:100%"
                                                         alt="{{$details->files[$i]->title}}"
                                                         src="{{route('user_level_category.lesson.files.address', ['key'=>$details->files[$i]->secret_key, 'userLevelCategoryId'=>$userLevelCategoryId, 'private_key'=>$key])}}"/>
+                                                </a>
                                                 @endif
                                             </div>
                                         </div>
