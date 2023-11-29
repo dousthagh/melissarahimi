@@ -51,4 +51,22 @@
 <!--Style Switcher -->
 <script src="{{asset('panel/lib/styleswitcher/jQuery.style.switcher.js')}}"></script>
 </body>
+
+
+<script>
+
+    $(".en-input").keypress(function(event){
+            if ((event.charCode >= 65 && event.charCode <= 90) || // A-Z
+                (event.charCode >= 97 && event.charCode <= 122)) {
+                    return true
+                }
+                else{
+                    alert("شما تنها مجاز به وارد کردن حروف انگلیسی می باشید")
+                    return false
+                }
+        });
+</script>
+
 </html>
+
+
