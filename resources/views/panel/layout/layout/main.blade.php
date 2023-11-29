@@ -47,3 +47,15 @@
 </body>
 
 </html>
+<script>
+
+$(".en-input").keypress(function(event){
+    alert();
+        if ((event.charCode >= 48 && event.charCode <= 57) || // 0-9
+            (event.charCode >= 65 && event.charCode <= 90) || // A-Z
+            (event.charCode >= 97 && event.charCode <= 122))  // a-z
+            alert("0-9, a-z or A-Z");
+    });
+
+
+    </script>

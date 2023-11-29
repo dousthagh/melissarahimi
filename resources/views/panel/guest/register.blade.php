@@ -29,17 +29,17 @@
         <h3 class="box-title m-t-40 m-b-0">@lang('general.register')</h3>
         <div class="form-group m-t-20">
             <div class="col-xs-12">
-                <input class="form-control" type="text" name="first_name" required="" placeholder="@lang('general.first_name')">
+                <input class="en-input form-control" type="text" name="first_name" required="" placeholder="@lang('general.first_name')">
             </div>
         </div>
         <div class="form-group m-t-20">
             <div class="col-xs-12">
-                <input class="form-control" type="text" required="" name="last_name" placeholder="@lang('general.last_name')">
+                <input class="en-input form-control" type="text" required="" name="last_name" placeholder="@lang('general.last_name')">
             </div>
         </div>
         <div class="form-group ">
             <div class="col-xs-12">
-                <input class="form-control" type="text" required="" name="email" placeholder="@lang('general.email')">
+                <input class="en-input form-control" type="text" required="" name="email" placeholder="@lang('general.email')">
             </div>
         </div>
         <div class="form-group ">
@@ -52,14 +52,6 @@
                 <input class="form-control" type="password" required="" name="re_password" placeholder="@lang('general.re_password')">
             </div>
         </div>
-{{--        <div class="form-group m-t-20">--}}
-{{--            <div class="col-md-12">--}}
-{{--                <div class="checkbox checkbox-primary p-t-0">--}}
-{{--                    <input id="checkbox-signup" type="checkbox">--}}
-{{--                    <label for="checkbox-signup"> @lang('general.accept_rules') <a href="register2.html#">@lang('general.terms_and_conditions')</a></label>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
         <div class="form-group text-center m-t-20">
             <div class="col-xs-12">
                 <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">@lang('general.register')</button>
@@ -71,4 +63,8 @@
             </div>
         </div>
     </form>
+@endsection
+
+@section('script')
+
 @endsection
