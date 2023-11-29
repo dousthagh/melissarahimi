@@ -16,6 +16,7 @@ class MasterMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        
         if (auth()->user()->hasRole("Master")) {
             return $next($request);
         }

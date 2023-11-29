@@ -10,23 +10,23 @@ use Illuminate\Http\Request;
 
 class LessonController extends Controller
 {
-    private LessonService $lessonService;
+    private LessonService $courseService;
 
     /**
      * @param LessonService $lessonService
      */
     public function __construct(LessonService $lessonService)
     {
-        $this->lessonService = $lessonService;
+        $this->courseService = $lessonService;
     }
 
     public function GetLessonsOfLevelCategoryId($level_category_id){
-        $data['lessons'] = $this->lessonService->GetLessonOfLevelCategoryId(levelCategoryId: $level_category_id);
+        $data['lessons'] = $this->courseService->GetLessonOfLevelCategoryId(levelCategoryId: $level_category_id);
         return view('panel.super_admin.lesson.index', $data);
     }
 
     public function GetLessonsDetails($lessonId){
-        $data['lesson'] = $this->lessonService->GetLessonDetails($lessonId);
+        $data['lesson'] = $this->courseService->GetLessonDetails($lessonId);
         return view('panel.super_admin.lesson.details', $data);
     }
 
@@ -38,7 +38,7 @@ class LessonController extends Controller
             if(isset($request->id))
                 $viewModel->setId($request->id);
 
-            $this->lessonService->SaveLesson($viewModel);
+            $this->courseService->SaveLesson($viewModel);
             return redirect()->back()->with('state', 1);
         }catch (\Exception $exception){
             return redirect()->back()->with('state', 0);
@@ -46,13 +46,13 @@ class LessonController extends Controller
     }
 
     public function LessonFile($lessonId){
-        $data['files'] = $this->lessonService->GetLessonFiles($lessonId);
+        $data['files'] = $this->courseService->GetLessonFiles($lessonId);
         $data['lesson_id'] = $lessonId;
         return view('panel.super_admin.lesson.files', $data);
     }
 
     public function DeleteLessonFile($id){
-        $this->lessonService->DeleteLessonFile($id);
+        $this->courseService->DeleteLessonFile($id);
         return redirect()->back()->with('state', 1);
     }
 
@@ -61,7 +61,7 @@ class LessonController extends Controller
         $viewModel->setLessonId($request->lesson_id);
         $viewModel->setTitle($request->title);
         $viewModel->setFile($request->file);
-        $this->lessonService->SaveLessonFile($viewModel);
+        $this->courseService->SaveLessonFile($viewModel);
         return redirect()->back()->with('state', 1);
     }
 }
