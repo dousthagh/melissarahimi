@@ -251,22 +251,30 @@ class LessonService
     {
         $lessonFile = $this->GetLessonFileAddressBySecretKey($key, $userLevelCategoryId, $privateKey);
 
-        if (!$lessonFile)
-            abort(403);
+if (!$lessonFile) {
+    abort(403);
+}
 
+$path = Storage::path("lesson" . DIRECTORY_SEPARATOR . $lessonFile->lesson_id . DIRECTORY_SEPARATOR . $lessonFile->file_path);
 
-        $path = Storage::path("lesson" . DIRECTORY_SEPARATOR . $lessonFile->lesson_id . DIRECTORY_SEPARATOR . $lessonFile->file_path);
-        if (!File::exists($path)) {
-            abort(404);
-        }
+if (!File::exists($path)) {
+    abort(404);
+}
 
-        $file = File::get($path);
+$file = File::get($path);
+$type = File::mimeType($path);
+$size = File::size($path);
 
-        $type = File::mimeType($path);
+$response = Response::make($file, 200);
+$response->header("Content-Type", $type);
+$response->header("Content-Disposition", "inline; filename=\"$type\"");
+$response->header("Content-Length", $size);
 
-        $response = Response::make($file);
+// Allow cross-origin requests if needed
+// $response->header("Access-Control-Allow-Origin", "*");
+// $response->header("Access-Control-Allow-Methods", "GET, OPTIONS");
 
-        $response->header("Content-Type", $type);
+return $response;
 
 
         return $response;
