@@ -39,7 +39,7 @@
         </div>
         <div class="form-group ">
             <div class="col-xs-12">
-                <input class="en-input form-control" type="text" required="" name="email" placeholder="@lang('general.email')">
+                <input class="form-control" type="text" required="" name="email" placeholder="@lang('general.email')">
             </div>
         </div>
         <div class="form-group ">
