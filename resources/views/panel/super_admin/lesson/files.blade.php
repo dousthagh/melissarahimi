@@ -28,7 +28,7 @@
                         <div class="form-group">
                             <label class="col-sm-12">عنوان</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" name="title" value="">
+                                <input type="text" class="form-control" name="title" value="" required>
                             </div>
                         </div>
                         <div class="form-group">
