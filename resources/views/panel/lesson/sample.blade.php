@@ -32,19 +32,21 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-12 form-group">
-                                <button type="submit" class="pull-right btn btn-default btn-rounded">ارسال</button>
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <button type="submit" class="pull-right btn btn-success " style="width: 100%" >ارسال</button>
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
             @endif
-
+<hr/>
             @foreach($samples as $sample)
                 <div class="row">
                     <div class="col-lg-8 col-sm-4">
                         <div
-                            class="panel @if($sample->status == 'new') panel-primary @elseif($sample->status == 'accepted') panel-success @elseif($sample->status == 'rejected') panel-danger @else panel-warning @endif">
+                            class="panel @if($sample->status == 'new') panel-primary @elseif($sample->status == 'accepted') panel-success @else panel-warning @endif">
                             <div class="panel-heading">
                                 {{$sample->status_title}}
                             </div>
@@ -160,7 +162,7 @@
                                     تایید
                                 </option>
                                 <option value="rejected">
-                                    رد
+                                    نیاز به ارسال مجدد
                                 </option>
                             </select>
                         </div>
@@ -171,8 +173,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">بستن</button>
-                        <button type="submit" class="btn btn-danger waves-effect waves-light">ذخیره تغییرات</button>
+                        <button type="submit" class="btn btn-success waves-effect waves-light" style="width:100%">اعمال</button>
                     </div>
                 </form>
 

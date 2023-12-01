@@ -7,7 +7,7 @@ return [
     'accept_sample_work_title' => 'تایید نمونه کار',
     'accept_sample_work_content' => 'نمونه کار شما تایید شد.',
     'reject_sample_work_title' => 'رد نمونه کار',
-    'reject_sample_work_content' => 'متاسفانه نمونه کار شما تایید نشد',
+    'reject_sample_work_content' => 'نمونه کار شما در وضعیت نیاز به ارسال مجدد قرار گرفت',
 
     'reduce_level_title' => "کاهش سطح",
     'reduce_level_content' => "متاسفانه سطح شما کاهش یافت",

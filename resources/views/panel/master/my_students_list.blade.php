@@ -1,5 +1,15 @@
 @extends("panel.layout.layout.main")
 @section("content")
+<div class="white-box">
+    <div class="row">
+        <div class="col-lg-2 col-sm-4 col-xs-4">
+            <a type="button" class="btn btn-primary btn-circle btn-sm" href="{{route('master.level_category.current_master_level_categories', ["userLevelCategoryParentId" => $parentUserLevelCategoryId])}}">
+                <i class="fa fa-list"></i> 
+            </a>        
+        </div>
+    </div>
+</div>
+</div>
     <div class="white-box">
         <h3 class="box-title">تغییر سطح هنرجو</h3>
         @if($errors->validator->any())

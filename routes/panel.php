@@ -111,6 +111,7 @@ Route::middleware(['auth'])->group(function () {
         Route::middleware(['auth.master'])->prefix("master")->group(function () {
             Route::get('index/{level_category_id}', [\App\Http\Controllers\Master\CourseController::class, "GetCoursesOfLevelCategoryId"])->name('master.course.index');
             Route::get('details/{course_id}', [\App\Http\Controllers\Master\CourseController::class, "GetCourseDetails"])->name('master.course.details');
+            Route::get('new/{level_category_id}', [\App\Http\Controllers\Master\CourseController::class, "NewCourse"])->name('master.course.new');
             Route::get('files/{course_id}', [\App\Http\Controllers\Master\CourseController::class, "CourseFiles"])->name('master.course.files');
             Route::get('delete_file/{id}', [\App\Http\Controllers\Master\CourseController::class, "DeleteCourseFile"])->name('master.course.files.delete');
             Route::post('save_file', [\App\Http\Controllers\Master\CourseController::class, "SaveCourseFile"])->name('master.course.files.save');

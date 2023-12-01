@@ -45,8 +45,10 @@ class CourseService
     public function SaveCourse(SaveCourseViewModel $model){
         if($model->getId() > 0)
             $course = Course::find($model->getId());
-        else
+        else{
             $course = new Course();
+            $course->level_category_id = $model->getLevelCategoryId();
+        }
 
         $course->title = $model->getTitle();
         $course->description = $model->getDescription();

@@ -5,6 +5,7 @@ namespace App\ViewModel\Course;
 class SaveCourseViewModel
 {
     private $id = 0;
+    private $levelCategoryId = 0;
     private $title;
     private $description;
 
@@ -22,6 +23,22 @@ class SaveCourseViewModel
     public function setId($id): void
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLevelCategoryId()
+    {
+        return $this->levelCategoryId;
+    }
+
+    /**
+     * @param mixed $levelCategoryId
+     */
+    public function setLevelCategoryId($levelCategoryId): void
+    {
+        $this->levelCategoryId = $levelCategoryId;
     }
 
     /**

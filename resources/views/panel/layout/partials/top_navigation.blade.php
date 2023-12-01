@@ -58,28 +58,6 @@
             <!-- .Task dropdown -->
         </ul>
 
-        <ul class="nav navbar-top-links navbar-right pull-right">
-
-            <li class="dropdown">
-                <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="index.html#"><b
-                        class="hidden-xs">{{\Illuminate\Support\Facades\Auth::user()->name}}</b><span
-                        class="caret"></span> </a>
-                <ul class="dropdown-menu dropdown-user animated flipInY">
-                    <li>
-                        <div class="dw-user-box">
-                            <div class="u-text">
-                                <h4>{{\Illuminate\Support\Facades\Auth::user()->name}}</h4>
-                                <p class="text-muted">{{\Illuminate\Support\Facades\Auth::user()->email}}</p></div>
-                        </div>
-                    </li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="{{route('logout')}}"><i class="fa fa-power-off"></i> خروج</a></li>
-                </ul>
-                <!-- /.dropdown-user -->
-            </li>
-
-            <!-- /.dropdown -->
-        </ul>
     </div>
     <!-- /.navbar-header -->
     <!-- /.navbar-top-links -->

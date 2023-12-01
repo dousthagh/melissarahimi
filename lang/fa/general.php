@@ -3,7 +3,7 @@
 return [
 
     'page_title' => 'آموزش تخصصی آرایش دائم',
-    'copyright' => 'تمامی حقوق این وب سایت متعلق به آکادمی آموزش تخصصی آرایش دائم ملیسا رحیمی می باشد',
+    'copyright' => 'all right reserved for moda academy',
     'login' => 'ورود',
     'donot_have_any_account_question' => 'حساب کاربری ندارید؟',
     'register' => 'ثبت نام',

@@ -9,6 +9,13 @@
                         class="ti-close visible-xs"></i></span> <span class="hide-menu">@lang('menu.title')</span></h3>
         </div>
         <ul class="nav" id="side-menu">
+            <li><a href="#" class="waves-effect"><i class="mdi mdi-av-timer fa-user" data-icon="v"></i> <span
+                class="hide-menu"> {{\Illuminate\Support\Facades\Auth::user()->name}} <p class="text-muted">{{\Illuminate\Support\Facades\Auth::user()->email}}</p> <span class="fa arrow"></span></span></a>
+        <ul class="nav nav-second-level">
+            <li><a href="{{route('logout')}}"><i class="fa fa-power-off"></i> خروج</a></li>
+        </ul>
+    </li>
+
             @if(auth()->user()->hasRole("SuperAdmin"))
                 <li><a href="#" class="waves-effect"><i class="mdi mdi-av-timer fa-fw" data-icon="v"></i> <span
                             class="hide-menu"> @lang('menu.super_admin') <span class="fa arrow"></span></span></a>

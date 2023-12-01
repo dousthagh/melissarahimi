@@ -131,7 +131,7 @@ class LessonService
             ->where("lesson_sample_works.lesson_id", $lessonId)
             ->select([
                 "lesson_sample_works.*",
-                DB::raw("(case status when 'new' then 'در انتظار بررسی' when 'accepted' then 'تایید شده' when 'rejected' then 'رد شده' else 'نا مشخص' end) as status_title"),
+                DB::raw("(case status when 'new' then 'در انتظار بررسی' when 'accepted' then 'تایید شده' when 'rejected' then 'نیاز به ارسال مجدد' else 'نا مشخص' end) as status_title"),
                 "user_level_categories_parent.user_id as master_user_id",
                 "user_level_categories.user_id as simple_user_id",
             ]);

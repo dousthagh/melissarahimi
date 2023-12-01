@@ -23,6 +23,7 @@ class CourseController extends Controller
 
     public function GetCoursesOfLevelCategoryId($level_category_id){
         $data['courses'] = $this->courseService->GetCourseOfLevelCategoryId(levelCategoryId: $level_category_id);
+        $data['level_category_id'] = $level_category_id;
         return view('panel.master.course.index', $data);
     }
 
@@ -30,23 +31,31 @@ class CourseController extends Controller
         try {
             $viewModel = new SaveCourseViewModel();
             $viewModel->setTitle($request->title);
+            if((int)$request->level_category_id > 0)
+                $viewModel->setLevelCategoryId((int)$request->level_category_id);
             $viewModel->setDescription($request->description);
             if(isset($request->id))
                 $viewModel->setId($request->id);
 
-            $this->courseService->SaveCourse($viewModel);
+                $this->courseService->SaveCourse($viewModel);
             return redirect()->back()->with('state', 1);
         }catch (\Exception $exception){
+            dd($exception->getMessage());
             return redirect()->back()->with('state', 0);
         }
     }
 
     public function GetCourseDetails($courseId){
-        $data['course'] = $this->courseService->GetCourseDetails($courseId);
-        if(empty($data['course']))
-            abort(404);
-        
+            $data['course'] = $this->courseService->GetCourseDetails($courseId);
+            if(empty($data['course']))
+                abort(404);
+
         return view('panel.master.course.details', $data);
+    }
+
+    public function NewCourse($levelCategoryId){
+        $data['level_category_id']= $levelCategoryId;
+        return view('panel.master.course.new', $data);
     }
 
     public function CourseFiles($courseId){
