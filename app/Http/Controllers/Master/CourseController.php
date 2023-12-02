@@ -24,7 +24,7 @@ class CourseController extends Controller
     public function GetCoursesOfLevelCategoryId($level_category_id){
         $data['courses'] = $this->courseService->GetCourseOfLevelCategoryId(levelCategoryId: $level_category_id);
         $data['level_category_id'] = $level_category_id;
-        return view('panel.master.course.index', $data);
+        return view('panel.super_admin.course.index', $data);
     }
 
     public function SaveCourse(Request $request){
@@ -50,18 +50,18 @@ class CourseController extends Controller
             if(empty($data['course']))
                 abort(404);
 
-        return view('panel.master.course.details', $data);
+        return view('panel.super_admin.course.details', $data);
     }
 
     public function NewCourse($levelCategoryId){
         $data['level_category_id']= $levelCategoryId;
-        return view('panel.master.course.new', $data);
+        return view('panel.super_admin.course.new', $data);
     }
 
     public function CourseFiles($courseId){
         $data['files'] = $this->courseFileService->GetCourseFiles($courseId);
         $data['course_id'] = $courseId;
-        return view('panel.master.course.files', $data);
+        return view('panel.super_admin.course.files', $data);
     }
 
     public function DeleteCourseFile($id){

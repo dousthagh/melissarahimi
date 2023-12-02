@@ -3,7 +3,7 @@
 <div class="white-box">
     <div class="row">
         <div class="col-lg-2 col-sm-4 col-xs-4">
-            <a type="button" class="btn btn-primary btn-circle btn-sm" href="{{route('master.course.new', ['level_category_id'=>$level_category_id])}}">
+            <a type="button" class="btn btn-primary btn-circle btn-sm" href="{{route('super_admin.course.new', ['level_category_id'=>$level_category_id])}}">
                 <i class="fa fa-plus"></i> 
             </a>        
         </div>
@@ -38,14 +38,14 @@
                            <div class="row">
                             <div class="col-lg-2 col-sm-4 col-xs-4">
                                 <a class="btn btn-default btn-circle"
-                                href="{{route('master.course.details', ['course_id' => $course->id])}}">
+                                href="{{route('super_admin.course.details', ['course_id' => $course->id])}}">
                                  <i class="fa fa-pencil"></i>
                              </a>
                             </div>
                             <div class="col-lg-2 col-sm-4 col-xs-4">
                                 
                              <a class="btn btn-default btn-circle"
-                             href="{{route('master.course.files', ['course_id' => $course->id])}}">
+                             href="{{route('super_admin.course.files', ['course_id' => $course->id])}}">
                               <i class="fa fa-file"></i>
                           </a>
                             </div>

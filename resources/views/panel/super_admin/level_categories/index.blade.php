@@ -18,52 +18,45 @@
         @endif
 
 
-        <table class="tablesaw table-striped table-hover table-bordered table tablesaw-columntoggle"
-               data-tablesaw-mode="columntoggle" id="table-977">
-            <thead>
-            <tr>
-                <th scope="col" data-tablesaw-sortable-col="" data-tablesaw-priority="persist">دسته بندی لاین</th>
-                <th scope="col" data-tablesaw-sortable-col="" data-tablesaw-sortable-default-col=""
-                    data-tablesaw-priority="3" class="tablesaw-priority-3">سطح
-                </th>
-                <th scope="col" data-tablesaw-sortable-col="" data-tablesaw-sortable-default-col=""
-                    data-tablesaw-priority="3" class="tablesaw-priority-4">لوگو
-                </th>
-                <th scope="col" data-tablesaw-sortable-col="" data-tablesaw-priority="2" class="tablesaw-priority-2">
-                    عملیات
-                </th>
-            </tr>
-            </thead>
+        <div class="table-responsive">
+            <table class="table table-hover manage-u-table">
             <tbody>
             @foreach($level_categories as $levelCategory)
                 <tr>
-                    <td class="title">{{$levelCategory->category_title}}</td>
-                    <td class="tablesaw-priority-3">{{$levelCategory->level_title}}</td>
-                    <td class="tablesaw-priority-4">
+                    <td >
                         @if($levelCategory->logo_file_address != null)
-                            <a target="_blank"
-                               href="{{route('super_admin.level_category.logo', ['level_category_id' => $levelCategory->id])}}">
-                                <img
-                                    src="{{route('super_admin.level_category.logo.thumb', ['level_category_id' => $levelCategory->id])}}"
-                                    class="img img-responsive img-rounded"/>
-                            </a>
-                        @else
-                            تعریف نشده
-                        @endif
+                        <a target="_blank"
+                           href="{{route('super_admin.level_category.logo', ['level_category_id' => $levelCategory->id])}}">
+                            <img
+                                src="{{route('super_admin.level_category.logo.thumb', ['level_category_id' => $levelCategory->id])}}"
+                                style="width: 50px; height:50px;"/>
+                        </a>
+                    @endif
+                        {{$levelCategory->category_title}}
+
+                        <p class="text-muted">{{$levelCategory->level_title}}</p>
                     </td>
-                    <td class="tablesaw-priority-2">
+                    <td >
+                        <a type="button" class="btn btn-primary btn-circle btn-sm" href="{{route('super_admin.course.index', ['level_category_id' => $levelCategory->id])}}">
+                            <i class="fa fa-solid fa-book"></i>
+                        </a>
+
                         @if($levelCategory->level_sort_order == 1)
                             <a class="btn btn-info btn-rounded"
-                               href="{{route('super_admin.lesson.index', ['level_category_id' => $levelCategory->id])}}">دروس</a>
+                               href="{{route('super_admin.lesson.index', ['level_category_id' => $levelCategory->id])}}">
+                               <i class="fa fa-solid fa-list"></i> 
+                            </a>
                         @endif
                         <a class="btn btn-success btn-rounded"
-                           href="{{route('super_admin.level_category.logo.change', ['level_category_id' => $levelCategory->id])}}">تغییر
-                            لوگو</a>
+                           href="{{route('super_admin.level_category.logo.change', ['level_category_id' => $levelCategory->id])}}">
+                                <i class="fa fa-solid fa-image"></i>
+                            </a>
                     </td>
                 </tr>
             @endforeach
 
             </tbody>
         </table>
+        </div>
     </div>
 @endsection

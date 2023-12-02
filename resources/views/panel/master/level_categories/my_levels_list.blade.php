@@ -9,7 +9,7 @@
                         @foreach($levels as $level)
                             <tr>
                                 <td>
-                                    <a a href="{{route('master.course.index', ["level_category_id"=>$level->level_category_id])}}">
+                                    <a a href="{{route('super_admin.course.index', ["level_category_id"=>$level->level_category_id])}}">
                                     {{$level->level_title}}
                                 </a>
                                 </td>

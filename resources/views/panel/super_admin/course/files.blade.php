@@ -21,10 +21,10 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="white-box">
-                    <form class="form-horizontal" action="{{route('super_admin.lesson.files.save')}}"
+                    <form class="form-horizontal" action="{{route('super_admin.course.files.save')}}"
                           method="post" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" value="{{$lesson_id}}" name="lesson_id"/>
+                        <input type="hidden" value="{{$course_id}}" name="course_id"/>
                         <div class="form-group">
                             <label class="col-sm-12">عنوان</label>
                             <div class="col-sm-12">
@@ -73,7 +73,7 @@
                     <td class="tablesaw-priority-4">{{$file->postfix}}</td>
                     <td class="tablesaw-priority-3">{{$file->file_path}}</td>
                     <td class="tablesaw-priority-2">
-                        <a href="{{route('super_admin.lesson.files.delete', ['id' => $file->id])}}"
+                        <a href="{{route('super_admin.course.files.delete', ['id' => $file->id])}}"
                            class="btn btn-danger btn-rounded">حذف</a>
                     </td>
                 </tr>

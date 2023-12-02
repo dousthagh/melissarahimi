@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="white-box">
-                    <form class="form-horizontal" action="{{route('master.course.details.save')}}" method="post">
+                    <form class="form-horizontal" action="{{route('super_admin.course.details.save')}}" method="post">
                         <input type="hidden" value="{{$level_category_id}}" name="level_category_id"/>
                         @csrf
                         <div class="form-group">

@@ -56,6 +56,16 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['auth.super_admin'])->group(function () {
 
+        Route::prefix("course")->group(function () {
+                Route::get('index/{level_category_id}', [\App\Http\Controllers\Master\CourseController::class, "GetCoursesOfLevelCategoryId"])->name('super_admin.course.index');
+                Route::get('details/{course_id}', [\App\Http\Controllers\Master\CourseController::class, "GetCourseDetails"])->name('super_admin.course.details');
+                Route::get('new/{level_category_id}', [\App\Http\Controllers\Master\CourseController::class, "NewCourse"])->name('super_admin.course.new');
+                Route::get('files/{course_id}', [\App\Http\Controllers\Master\CourseController::class, "CourseFiles"])->name('super_admin.course.files');
+                Route::get('delete_file/{id}', [\App\Http\Controllers\Master\CourseController::class, "DeleteCourseFile"])->name('super_admin.course.files.delete');
+                Route::post('save_file', [\App\Http\Controllers\Master\CourseController::class, "SaveCourseFile"])->name('super_admin.course.files.save');
+                Route::post('details/save', [\App\Http\Controllers\Master\CourseController::class, "SaveCourse"])->name('super_admin.course.details.save');
+        });
+
         Route::prefix('setting')->group(function () {
             Route::get('save', [SettingController::class, "Index"])->name('super_admin.setting');
             Route::post('save', [SettingController::class, "SaveSetting"])->name('super_admin.setting.save');
@@ -99,31 +109,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('my_levels/{userLevelCategoryParentId}', [LevelCategoryController::class, "GetCurrentMasterLevelCategories"])->name('master.level_category.current_master_level_categories');
     });
 
-    Route::prefix("course")->group(function () {
-        // Route::middleware(['auth.student'])->group(function () {
-        //     Route::get("/{user_level_category_id}", [LessonController::class, "GetLessonList"])->name("user_level_category.lesson.list");
-        //     Route::get("details/{userLevelCategoryId}/{lessonId}", [LessonController::class, "GetLessonDetails"])->name("user_level_category.lesson.details");
-        //     Route::get("get_address/{key}/{userLevelCategoryId}/{private_key}", [LessonController::class, "GetLessonFileAddressBySecretKey"])->name("user_level_category.lesson.files.address");
-        //     Route::post("send_sample_work", [LessonController::class, "SendSampleWork"])->name("user_level_category.lesson.sample_work.send");
-        //     Route::get("sample_work/{lessonId}/{userLevelCategoryId}", [LessonController::class, "MySampleWorkList"])->name("user_level_category.lesson.sample_work");
 
-        // });
-        Route::middleware(['auth.master'])->prefix("master")->group(function () {
-            Route::get('index/{level_category_id}', [\App\Http\Controllers\Master\CourseController::class, "GetCoursesOfLevelCategoryId"])->name('master.course.index');
-            Route::get('details/{course_id}', [\App\Http\Controllers\Master\CourseController::class, "GetCourseDetails"])->name('master.course.details');
-            Route::get('new/{level_category_id}', [\App\Http\Controllers\Master\CourseController::class, "NewCourse"])->name('master.course.new');
-            Route::get('files/{course_id}', [\App\Http\Controllers\Master\CourseController::class, "CourseFiles"])->name('master.course.files');
-            Route::get('delete_file/{id}', [\App\Http\Controllers\Master\CourseController::class, "DeleteCourseFile"])->name('master.course.files.delete');
-            Route::post('save_file', [\App\Http\Controllers\Master\CourseController::class, "SaveCourseFile"])->name('master.course.files.save');
-            Route::post('details/save', [\App\Http\Controllers\Master\CourseController::class, "SaveCourse"])->name('master.course.details.save');
-        });
-
-        // Route::get('sample_work_image/{id}/{isThumbnail}', [LessonController::class, "ShowSampleWorkImage"])->name("user_level_category.lesson.sample_work.image");
-        // Route::prefix("master")->group(function () {
-        //     Route::get('details/{user_level_category_id}', [MasterController::class, "MasterDetails"])->name("master.details");
-        //     Route::get('details/download_file/{file_id}', [MasterController::class, "GetMasterFileForDownload"])->name("master.details.file.download");
-        // });
-    });
 
 
     Route::prefix("user_level_category")->group(function () {
