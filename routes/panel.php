@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\Master\CourseController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\SuperAdmin\LessonContentController;
 use App\Http\Controllers\SuperAdmin\LevelCategoryController;
 use App\Http\Controllers\SuperAdmin\SettingController;
 use App\Http\Controllers\SuperAdmin\UserManagementController;
@@ -57,13 +59,13 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth.super_admin'])->group(function () {
 
         Route::prefix("course")->group(function () {
-                Route::get('index/{level_category_id}', [\App\Http\Controllers\Master\CourseController::class, "GetCoursesOfLevelCategoryId"])->name('super_admin.course.index');
-                Route::get('details/{course_id}', [\App\Http\Controllers\Master\CourseController::class, "GetCourseDetails"])->name('super_admin.course.details');
-                Route::get('new/{level_category_id}', [\App\Http\Controllers\Master\CourseController::class, "NewCourse"])->name('super_admin.course.new');
-                Route::get('files/{course_id}', [\App\Http\Controllers\Master\CourseController::class, "CourseFiles"])->name('super_admin.course.files');
-                Route::get('delete_file/{id}', [\App\Http\Controllers\Master\CourseController::class, "DeleteCourseFile"])->name('super_admin.course.files.delete');
-                Route::post('save_file', [\App\Http\Controllers\Master\CourseController::class, "SaveCourseFile"])->name('super_admin.course.files.save');
-                Route::post('details/save', [\App\Http\Controllers\Master\CourseController::class, "SaveCourse"])->name('super_admin.course.details.save');
+                Route::get('index/{level_category_id}', [CourseController::class, "GetCoursesOfLevelCategoryId"])->name('super_admin.course.index');
+                Route::get('details/{course_id}', [CourseController::class, "GetCourseDetails"])->name('super_admin.course.details');
+                Route::get('new/{level_category_id}', [CourseController::class, "NewCourse"])->name('super_admin.course.new');
+                Route::get('files/{course_id}', [CourseController::class, "CourseFiles"])->name('super_admin.course.files');
+                Route::get('delete_file/{id}', [CourseController::class, "DeleteCourseFile"])->name('super_admin.course.files.delete');
+                Route::post('save_file', [CourseController::class, "SaveCourseFile"])->name('super_admin.course.files.save');
+                Route::post('details/save', [CourseController::class, "SaveCourse"])->name('super_admin.course.details.save');
         });
 
         Route::prefix('setting')->group(function () {
@@ -92,6 +94,16 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::prefix('lesson')->group(function () {
+            Route::prefix("content")->group(function () {
+                Route::get('index/{lesson_id}', [LessonContentController::class, "GetContentOfLesson"])->name('super_admin.lesson.content.index');
+                Route::get('details/{content_id}', [LessonContentController::class, "GetContentDetails"])->name('super_admin.lesson.content.details');
+                Route::get('new/{lesson_id}', [LessonContentController::class, "NewContent"])->name('super_admin.lesson.content.new');
+//                Route::get('files/{course_id}', [LessonContentController::class, "CourseFiles"])->name('super_admin.course.files');
+//                Route::get('delete_file/{id}', [LessonContentController::class, "DeleteCourseFile"])->name('super_admin.course.files.delete');
+//                Route::post('save_file', [LessonContentController::class, "SaveCourseFile"])->name('super_admin.course.files.save');
+                Route::post('details/save', [LessonContentController::class, "SaveContent"])->name('super_admin.lesson.content.save');
+            });
+
             Route::get('index/{level_category_id}', [\App\Http\Controllers\SuperAdmin\LessonController::class, "GetLessonsOfLevelCategoryId"])->name('super_admin.lesson.index');
             Route::get('details/{lesson_id}', [\App\Http\Controllers\SuperAdmin\LessonController::class, "GetLessonsDetails"])->name('super_admin.lesson.details');
             Route::get('files/{lesson_id}', [\App\Http\Controllers\SuperAdmin\LessonController::class, "LessonFile"])->name('super_admin.lesson.files');

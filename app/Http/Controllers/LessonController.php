@@ -7,7 +7,7 @@ use App\Models\SecretKey;
 use App\Services\Panel\LessonService;
 use App\Services\Panel\UserLevelCategoryService;
 use App\Services\SecretKeyService;
-use App\ViewModel\Lesson\NewSampleWorkViewModel;
+use App\ViewModel\Lesson\LessonContent\NewSampleWorkViewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;

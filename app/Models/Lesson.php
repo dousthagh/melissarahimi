@@ -16,6 +16,9 @@ class Lesson extends Model
     public function files(){
         return $this->hasMany(LessonFile::class);
     }
+    public function LessonContents(){
+        return $this->hasMany(LessonContent::class);
+    }
 
     public function passedLessons(){
         return $this->hasMany(PassedLesson::class);

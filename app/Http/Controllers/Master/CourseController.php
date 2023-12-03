@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Services\Panel\Course\CourseFileService;
 use App\Services\Panel\Course\CourseService;
 use App\Services\Panel\Course\CoursFileeService;
-use App\ViewModel\Course\SaveCourseFileViewModel;
-use App\ViewModel\Course\SaveCourseViewModel;
+use App\ViewModel\Lesson\LessonContent\SaveCourseFileViewModel;
+use App\ViewModel\Lesson\LessonContent\SaveCourseViewModel;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -40,7 +40,6 @@ class CourseController extends Controller
                 $this->courseService->SaveCourse($viewModel);
             return redirect()->back()->with('state', 1);
         }catch (\Exception $exception){
-            dd($exception->getMessage());
             return redirect()->back()->with('state', 0);
         }
     }

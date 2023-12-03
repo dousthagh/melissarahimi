@@ -20,30 +20,25 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="white-box">
-                    <form class="form-horizontal" action="{{route('super_admin.lesson.details.save')}}" method="post">
+                    <form class="form-horizontal" action="{{route('super_admin.lesson.content.save')}}" method="post">
                         @csrf
-                        <input type="hidden" value="{{$lesson->id}}" name="id"/>
+                        <input type="hidden" value="{{$content->id}}" name="id"/>
                         <div class="form-group">
-                            <label class="col-md-12">عنوان</label>
-                            <div class="col-md-12">
-                                <input type="text" class="form-control" name="title" value="{{$lesson->title}}"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-12">توضیحات</label>
                             <div id="editor" style="min-height:200px;">
-                                {!! $lesson->description !!}
+                                {!! $content->content !!}
                             </div>
                             <input type="hidden" name="description" id="description"
-                                   value="{{$lesson->description}}"/>
+                                   value="{{$content->content}}"/>
                         </div>
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">ذخیره</button>
+                            <span class="text-muted">
+                                <a type="submit" class="btn btn-outline waves-effect waves-light m-r-10"
+                                   href="{{route('super_admin.lesson.content.index', ['lesson_id'=>$content->lesson_id])}}">بازگشت</a>
+                            </span>
                         </div>
                     </form>
-                </div>
-                <div class="white-box">
-                    <a href="{{route('super_admin.lesson.content.index', ['lesson_id'=>$lesson->id])}}" class="btn btn-info waves-effect waves-light m-r-10">محتوا</a>
                 </div>
             </div>
         </div>
