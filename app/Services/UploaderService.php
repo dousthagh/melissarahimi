@@ -17,7 +17,6 @@ class UploaderService
         try {
             $destinationAddress = Storage::path($savePath) . DIRECTORY_SEPARATOR;
             $imagesName = date('ymdhis') . '.' . $file->getClientOriginalExtension();
-            dump("address::: ", $destinationAddress);
 //            if (!file_exists($destinationAddress)) {
 //                dd("here");
 //                mkdir($destinationAddress);

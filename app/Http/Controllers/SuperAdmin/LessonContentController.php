@@ -33,6 +33,9 @@ class LessonContentController extends Controller
             $viewModel->setContent($request->description);
             if(isset($request->id))
                 $viewModel->setId($request->id);
+            $viewModel->setFiles($request->file);
+            $viewModel->setDeletedFilesId($request->delete_files);
+
 
             $this->contentService->SaveContent($viewModel);
             return redirect()->back()->with('state', 1);

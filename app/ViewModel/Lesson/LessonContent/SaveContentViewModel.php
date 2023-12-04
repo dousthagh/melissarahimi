@@ -7,6 +7,24 @@ class SaveContentViewModel
     private $id = 0;
     private $lessonId = 0;
     private $content;
+    private $files;
+    private $deletedFilesId;
+
+    /**
+     * @return mixed
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
+    /**
+     * @param mixed $files
+     */
+    public function setFiles($files): void
+    {
+        $this->files = $files;
+    }
 
     public function getId(): int
     {
@@ -42,6 +60,22 @@ class SaveContentViewModel
     public function setContent($content): void
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeletedFilesId()
+    {
+        return $this->deletedFilesId;
+    }
+
+    /**
+     * @param mixed $deletedFilesId
+     */
+    public function setDeletedFilesId($deletedFilesId): void
+    {
+        $this->deletedFilesId = $deletedFilesId;
     }
 
 

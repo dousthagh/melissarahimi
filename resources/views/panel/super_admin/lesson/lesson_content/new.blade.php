@@ -20,15 +20,38 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="white-box">
-                    <form class="form-horizontal" action="{{route('super_admin.lesson.content.save')}}" method="post">
+                    <form class="form-horizontal" action="{{route('super_admin.lesson.content.save')}}" method="post" enctype="multipart/form-data">
                         <input type="hidden" value="{{$lesson_id}}" name="lesson_id"/>
                         @csrf
                         <div class="form-group">
-                            <label class="col-md-12">توضیحات</label>
                             <div id="editor" style="min-height:200px;">
                             </div>
                             <input type="hidden" name="description" id="description"
                                    value=""/>
+                        </div>
+                        <div class="panel panel-darkblue">
+                            <div class="panel-heading">
+                                <div class="panel-title">فایل ها</div>
+                            </div>
+                            <div class="panel-body" >
+                                <div class="container-fluid row" id="file-container">
+                                    <div class="col-md-6 p-10" id="container0" >
+                                        <div class="col-md-1">
+                                            <i class="fa fa-close text-danger remove" id="0" onclick="doRemove(this)" index="0" ></i>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input type="file" name="file[]" id="file0"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <button class="btn btn-info btn-rounded waves-effect waves-light" type="button"
+                                        id="add-file">
+                                    <i class="fa fa-plus"></i>
+                                    افزودن
+                                </button>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -41,6 +64,7 @@
                             </a>
                                 </span>
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -137,12 +161,25 @@
         }
 
         $(document).ready(function () {
-
+            let newId = 1;
             let quill = initEditor();
 
             quill.on('text-change', function (delta, oldDelta, source) {
                 $("#description").val(quill.container.firstChild.innerHTML);
             });
+
+            $("#add-file").click(function () {
+                let html = '<div class="col-md-6 p-10" id="container'+newId+'"><div class="col-md-1"><i onclick="doRemove(this);" class="fa fa-close text-danger remove" index="'+newId+'" ></i></div> <div class="col-md-5"><input type="file" name="file[]" id="file'+newId+'"/></div></div>';
+                $("#file-container").append(html)
+                newId++;
+            });
         })
+
+
+        function doRemove(e) {
+            let index = $(e).attr('index');
+            $("#file-container").find("#container"+index).remove();
+        }
+
     </script>
 @endsection

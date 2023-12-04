@@ -15321,4 +15321,9 @@ div.dataTables_filter,div.dataTables_paginate {
     font-size: 14px;
  }
 
+
+
+}
+.remove{
+    cursor: pointer;
 }
