@@ -41,6 +41,10 @@
                                href="{{route('super_admin.lesson.content.details', ['content_id' => $content->id])}}">
                                 <i class="fa fa-pencil"></i>
                             </a>
+                            <a class="btn btn-default btn-circle"
+                               href="{{route('super_admin.lesson.content.delete', ['id' => $content->id, 'lesson_id'=>$content->lesson_id])}}">
+                                <i class="fa fa-trash text-danger"></i>
+                            </a>
                         </div>
                     </div>
                 @endforeach

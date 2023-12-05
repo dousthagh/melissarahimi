@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Services\Panel\LessonContentService;
+use App\Services\SecretKeyService;
 use App\ViewModel\Lesson\LessonContent\SaveContentViewModel;
 use Illuminate\Http\Request;
 use function Webmozart\Assert\Tests\StaticAnalysis\length;
@@ -11,10 +12,11 @@ use function Webmozart\Assert\Tests\StaticAnalysis\length;
 class LessonContentController extends Controller
 {
     private LessonContentService $contentService;
-
-    public function __construct(LessonContentService $contentService)
+    private SecretKeyService $secretKeyService;
+    public function __construct(LessonContentService $contentService, SecretKeyService $secretKeyService)
     {
         $this->contentService = $contentService;
+        $this->secretKeyService = $secretKeyService;
     }
 
     public function GetContentOfLesson($lessonId){
@@ -49,6 +51,7 @@ class LessonContentController extends Controller
             if(empty($data['content']))
                 abort(404);
 
+        $data['key'] = $this->secretKeyService->generateAndSave();
 
         return view('panel.super_admin.lesson.lesson_content.details', $data);
     }
@@ -57,6 +60,20 @@ class LessonContentController extends Controller
         $data['lesson_id']= $lessonId;
         return view('panel.super_admin.lesson.lesson_content.new', $data);
     }
+
+
+    public function GetLessonContentFileAddressBySecretKey($key, $lessonContentId, $privateKey)
+    {
+        return $this->contentService->GetLessonContentFile($key, $lessonContentId, $privateKey);
+    }
+
+    public function Delete($id, $lessonId)
+    {
+        $this->contentService->DeleteContent($id);
+        return redirect()->route('super_admin.lesson.content.index', ['lesson_id'=>$lessonId]);
+    }
+
+
 
 //    public function CourseFiles($courseId){
 //        $data['files'] = $this->courseFileService->GetCourseFiles($courseId);

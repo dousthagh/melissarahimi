@@ -24,7 +24,7 @@
                           enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" value="{{$content->id}}" name="id"/>
-                        <input type="text" name="delete_files" id="delete_files"/>
+                        <input type="hidden" name="delete_files" id="delete_files"/>
                         <div class="form-group">
                             <div id="editor" style="min-height:200px;">
                                 {!! $content->content !!}
@@ -45,7 +45,7 @@
                                                    onclick="doRemove(this)" index="{{$index}}" myid="{{$content->files[$index]->id}}"></i>
                                             </div>
                                             <div class="col-md-5">
-                                                <span class="text-info">{{$content->files[$index]->file_path}}</span>
+                                                <a target="_blank" href="{{route('lesson.content.files.address', ['key'=>$content->files[$index]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}" class="text-info"> {{$content->files[$index]->file_path}}</a>
                                             </div>
                                         </div>
                                     @endfor

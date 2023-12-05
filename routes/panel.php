@@ -98,9 +98,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('index/{lesson_id}', [LessonContentController::class, "GetContentOfLesson"])->name('super_admin.lesson.content.index');
                 Route::get('details/{content_id}', [LessonContentController::class, "GetContentDetails"])->name('super_admin.lesson.content.details');
                 Route::get('new/{lesson_id}', [LessonContentController::class, "NewContent"])->name('super_admin.lesson.content.new');
-//                Route::get('files/{course_id}', [LessonContentController::class, "CourseFiles"])->name('super_admin.course.files');
-//                Route::get('delete_file/{id}', [LessonContentController::class, "DeleteCourseFile"])->name('super_admin.course.files.delete');
-//                Route::post('save_file', [LessonContentController::class, "SaveCourseFile"])->name('super_admin.course.files.save');
+                Route::get("delete/{id}/{lesson_id}", [LessonContentController::class, "Delete"])->name("super_admin.lesson.content.delete");
                 Route::post('details/save', [LessonContentController::class, "SaveContent"])->name('super_admin.lesson.content.save');
             });
 
@@ -164,5 +162,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('thumb_logo/{level_category_id}', [LevelCategoryController::class, "GetLevelCategoryLogoAsThumbnail"])->name('super_admin.level_category.logo.thumb');
         Route::get('logo/{level_category_id}', [LevelCategoryController::class, "GetLevelCategoryLogo"])->name('super_admin.level_category.logo');
     });
+
+    Route::get("get_file_address/{key}/{lesson_content_id}/{private_key}", [LessonContentController::class, "GetLessonContentFileAddressBySecretKey"])->name("lesson.content.files.address");
 });
 

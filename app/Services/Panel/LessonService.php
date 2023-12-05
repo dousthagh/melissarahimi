@@ -3,6 +3,7 @@
 namespace App\Services\Panel;
 
 use App\Models\Lesson;
+use App\Models\LessonContentFiles;
 use App\Models\LessonFile;
 use App\Models\LessonSampleWork;
 use App\Models\Level;
@@ -277,6 +278,9 @@ class LessonService
         return $response;
 
     }
+
+
+
 
     private function isPassedLesson($lessonId, $userId, $userLevelCategoryId)
     {
