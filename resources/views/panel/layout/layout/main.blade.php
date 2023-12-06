@@ -23,10 +23,11 @@
 
     <div id="page-wrapper">
 
-        <div class="container-fluid">
+        <div class="container-fluid ">
             <!-- .row -->
             <div class="row">
                 <div class="col-md-12">
+                    <div class="m-t-10"></div>
                     @yield('content')
                 </div>
             </div>

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Services\Panel\LessonService;
-use App\ViewModel\Lesson\LessonContent\SaveLessonFileViewModel;
-use App\ViewModel\Lesson\LessonContent\SaveLessonViewModel;
+use App\ViewModel\Lesson\SaveLessonFileViewModel;
+use App\ViewModel\Lesson\SaveLessonViewModel;
 use Illuminate\Http\Request;
 
 class LessonController extends Controller

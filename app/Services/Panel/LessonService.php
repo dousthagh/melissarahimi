@@ -13,16 +13,15 @@ use App\Models\UserLevelCategory;
 use App\Services\UploaderService;
 use App\Services\Panel\Message\MessageService;
 use App\Services\SecretKeyService;
-use App\ViewModel\Lesson\LessonContent\NewSampleWorkViewModel;
-use App\ViewModel\Lesson\LessonContent\SaveLessonFileViewModel;
-use App\ViewModel\Lesson\LessonContent\SaveLessonViewModel;
+use App\ViewModel\Lesson\NewSampleWorkViewModel;
+use App\ViewModel\Lesson\SaveLessonFileViewModel;
+use App\ViewModel\Lesson\SaveLessonViewModel;
 use App\ViewModel\Message\SendMessageViewModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use phpDocumentor\Reflection\Types\True_;
 use Ramsey\Uuid\Guid\Guid;
 
 class LessonService
@@ -88,6 +87,9 @@ class LessonService
             }])
             ->with(["passedLessons" => function ($table) use ($userLevelCategoryId) {
                 $table->where("passed_lessons.user_level_category_id", $userLevelCategoryId);
+            }])
+            ->with(['lessonContents'=>function($table){
+                $table->with('files');
             }])
             ->first();
     }

@@ -121,7 +121,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-
     Route::prefix("user_level_category")->group(function () {
 
         Route::prefix("lesson")->group(function () {

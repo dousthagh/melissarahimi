@@ -34,7 +34,11 @@
                 @foreach($contents as $content)
                     <div class="panel">
                         <div class="panel-body">
-                            {!! $content->content !!}
+                            @if(!empty($content->content))
+                                {!! $content->content !!}
+                            @else
+                                <span class="text-muted">[توضیحاتی ثبت نشده است]</span>
+                            @endif
                         </div>
                         <div class="panel-footer">
                             <a class="btn btn-default btn-circle"

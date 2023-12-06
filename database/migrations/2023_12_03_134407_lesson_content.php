@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('lesson_contents', function (Blueprint $table) {
             $table->id();
             $table->integer('lesson_id')->index();
-            $table->text('content');
+            $table->text('content')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

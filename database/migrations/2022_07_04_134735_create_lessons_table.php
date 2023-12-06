@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('level_category_id')->index();
             $table->string('title');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
