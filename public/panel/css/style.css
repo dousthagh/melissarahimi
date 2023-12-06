@@ -3,6 +3,9 @@
 @import "spinners.css";
 @import "icons/material-design-iconic-font/css/materialdesignicons.min.css";
 @import "font.css";
+*{
+    user-select: none;
+}
 .preloader {
  width:100%;
  height:100%;

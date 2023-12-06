@@ -38,33 +38,35 @@
                     <hr/>
                 </div>
             @endif
-
-            @foreach($details->lessonContents as $content)
-                <div class="white-box">
-                    {!! $content->content !!}
-                </div>
-                @for($i = 0; $i<count($content->files); $i++)
-                    <div class="row">
-                        <div class="col-lg-12">
-                            @if(in_array(strtolower($content->files[$i]->postfix), ['mp4', 'mpeg']))
-                                <video id="video_player" controls="" controlsList="nodownload"
-                                       style="height: auto; width:100%;">
-                                    <source
-                                        src="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}"
-                                        type="video/mp4"/>
-                                </video>
-                            @elseif(in_array(strtolower($content->files[$i]->postfix), ['png', 'jpeg', 'jpg', 'tif']))
-                                <a href="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}">
-                                    <img alt="{{$content->files[$i]->title}}"
-                                         src="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}"
-                                         class="img-responsive model_img" id="sa-image"/>
-                                </a>
-                            @endif
-                        </div>
+            @if($details->lessonContents != null)
+                @foreach($details->lessonContents as $content)
+                    <div class="white-box">
+                        {!! $content->content !!}
                     </div>
-                @endfor
-            @endforeach
+                    @for($i = 0; $i<count($content->files); $i++)
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @if(in_array(strtolower($content->files[$i]->postfix), ['mp4', 'mpeg']))
+                                    <video id="video_player" controls="" controlsList="nodownload"
+                                           style="height: auto; width:100%;">
+                                        <source
+                                            src="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}"
+                                            type="video/mp4"/>
+                                    </video>
+                                @elseif(in_array(strtolower($content->files[$i]->postfix), ['png', 'jpeg', 'jpg', 'tif']))
+                                    <a href="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}">
+                                        <img alt="{{$content->files[$i]->title}}"
+                                             src="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}"
+                                             class="img-responsive model_img" id="sa-image"/>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    @endfor
+                @endforeach
+            @endif
         </div>
+        @if($is_passed)
         <div class="panel-footer">
             <div class="white-box">
                 <a class="btn btn-success btn-rounded"
@@ -74,6 +76,14 @@
                 </a>
             </div>
         </div>
+        @endif
     </div>
 @endsection
 
+@section('script')
+    <script>
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
+@endsection

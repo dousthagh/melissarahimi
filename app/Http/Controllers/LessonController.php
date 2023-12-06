@@ -41,10 +41,9 @@ class LessonController extends Controller
         $data['details'] = $this->lessonService->GetLessonDetailsForCurrentUserLevelCategoryId($lessonId, $userLevelCategoryId);
         $data['key'] = $this->secretKeyService->generateAndSave();
         $data['userLevelCategoryId'] = $userLevelCategoryId;
+        $data['is_passed'] = $this->lessonService->isPassedLesson($lessonId, auth()->id(), $userLevelCategoryId);
         if (!$data['details'])
             abort(403);
-
-
 
         return view("panel.lesson.details", $data);
     }

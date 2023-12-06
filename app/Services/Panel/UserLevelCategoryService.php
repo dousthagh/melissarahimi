@@ -52,7 +52,7 @@ class UserLevelCategoryService
         $user = User::where("id", $model->getUserId())->first();
         $generatedCode =substr($roleName, 0,1) . $user->id.substr($user->first_name,0,1).substr($user->last_name,0,1). $parentUser->id.substr($parentUser->first_name,0,1).substr($parentUser->last_name,0,1);
         $userLevelCategory->code = $generatedCode;
-        
+
         DB::beginTransaction();
         UserLevelCategory::join("level_categories", "level_categories.id", "=", "user_level_categories.level_category_id")
             ->where("is_active", 1)
@@ -296,11 +296,15 @@ class UserLevelCategoryService
     public function getFirstUserLevelCategory($userId, $userLevelCategoryId, $checkIsActive = true)
     {
         $userLevelCategory = UserLevelCategory::where("id", $userLevelCategoryId)
+            ->with(['levelCategory'=> function($tblLevelCategory){
+                $tblLevelCategory->with('category');
+            }])
             ->where("user_id", $userId);
         if ($checkIsActive) {
             $userLevelCategory = $userLevelCategory->where("is_active", 1);
         }
         $userLevelCategory = $userLevelCategory->first();
+
         if (!$userLevelCategory)
             abort(403);
 
@@ -319,6 +323,8 @@ class UserLevelCategoryService
         if ($result->expire_date < date("Y-m-d H:i:s")) {
             $result['expired'] = true;
         }
+        $result['category_title'] = $userLevelCategory->levelCategory->category->title;
+        $result['category_description'] = $userLevelCategory->levelCategory->category->description;
         return $result;
     }
 
