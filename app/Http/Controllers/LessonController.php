@@ -30,6 +30,7 @@ class LessonController extends Controller
     {
         $data['lessons'] = $this->lessonService->GetLessonsByUserLevelCategoryId($user_level_category_id);
         $data['userLevelCategoryDetails'] = $this->userLevelCategoryService->getUserLevelCategoryDetails($user_level_category_id);
+        dd($data['userLevelCategoryDetails']);
         return view("panel.lesson.list", $data);
     }
 
@@ -56,6 +57,11 @@ class LessonController extends Controller
     public function ShowSampleWorkImage($sampleWorkId, $isThumbnail)
     {
         return $this->lessonService->GetSampleWorkImage($sampleWorkId, $isThumbnail);
+    }
+
+    public function ShowMasterSampleWorkImage($sampleWorkId, $isThumbnail)
+    {
+        return $this->lessonService->GetMasterSampleWorkImage($sampleWorkId, $isThumbnail);
     }
 
     public function MySampleWorkList($lessonId, $userLevelCategoryId)

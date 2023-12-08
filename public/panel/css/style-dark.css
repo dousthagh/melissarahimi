@@ -6,13 +6,17 @@
 *{
     user-select: none;
 }
+hr{
+    background-color: #747677;
+}
+
 .preloader {
  width:100%;
  height:100%;
  top:0;
  position:fixed;
  z-index:99999;
- background:#fff
+ background:#5b616d
 }
 .preloader .cssload-speeding-wheel {
  position:absolute;
@@ -33,7 +37,10 @@ body {
 html {
  position:relative;
  min-height:100%;
- background:#fff
+ background:#3c4451
+}
+.col-md-12{
+    padding: 0;
 }
 h1,h2,h3,h4,h5,h6 {
  color:#313131;
@@ -459,7 +466,14 @@ hr {
  color:#ffc36d
 }
 .text-success {
- color:#53e69d
+ color:#53e69d !important;
+}
+.text-small{
+    font-size: 12px !important;
+}
+
+.text-bold{
+    font-weight: bold !important;
 }
 .text-info {
  color:#2cabe3
@@ -494,6 +508,9 @@ hr {
 .bg-warning {
  background-color:#ffc36d!important
 }
+.bg-dark {
+ background-color:#3c4451!important
+}
 .bg-danger,.bg-theme-alt {
  background-color:#ff7676!important
 }
@@ -514,6 +531,10 @@ hr {
 }
 .bg-light {
  background-color:#e4e7ea!important
+}
+
+.text-light {
+ color:#e4e7ea!important
 }
 .bg-extralight {
  background-color:#f7fafc!important
@@ -756,17 +777,17 @@ label {
 #page-wrapper {
  padding:0 0 60px;
  min-height:568px;
- background:#fff
+ background:#3c4451
 }
 .footer {
  bottom:0;
- color:#b2b4b6;
+ color:#e4e7ea;
  left:0;
  padding:5px 5px;
  position:absolute;
  right:0;
  font-size: 12px;
- background:#fff
+ background:#3c4451
 }
 .bg-title {
  background:#fff;
@@ -1269,12 +1290,8 @@ table.dataTable thead .sorting:after {
 .huge {
  font-size:40px
 }
-.small{
-    font-size: 12px;
-}
 .white-box {
- background:#fff;
- padding:10px;
+ background:#5b616d;
  margin-bottom:15px
 }
 .white-box .box-title {
@@ -1284,31 +1301,28 @@ table.dataTable thead .sorting:after {
  font-size:16px
 }
 .panel {
- border-bottom-left-radius:10px;
- border-bottom-right-radius:10px;
+ border-bottom-left-radius:7;
+ border-bottom-right-radius:7;
  margin-bottom:30px;
  border:0;
- box-shadow:1px 2px 10px rgb(189, 189, 189);
+ background-color:#5b616d ;
 }
 .panel .panel-heading {
-    border-top-left-radius:10px;
- border-top-right-radius:10px;
+ border-top-left-radius:7;
+ border-top-right-radius:7;
  font-weight:500;
- font-size:14px;
+ font-size:16px;
  padding:20px 25px
 }
 .panel .panel-heading .panel-title {
-
- font-size:14px;
+ font-size:16px;
  color:#313131
 }
 .panel .panel-heading a i {
  font-size:12px;
  margin-left:8px
 }
-.col-md-12{
-    padding: 0px;
-}
+
 .panel .panel-action {
  float:left
 }
@@ -1330,8 +1344,7 @@ table.dataTable thead .sorting:after {
 }
 .panel .panel-footer {
  background:#fff;
- border-bottom-left-radius:10px;
- border-bottom-right-radius:10px;
+ border-radius:0;
  padding:20px 25px
 }
 .panel-green,.panel-success {

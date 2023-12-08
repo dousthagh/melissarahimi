@@ -10,71 +10,106 @@
             </ul>
         </div>
     @endif
-    
 
-@foreach ($samples as $sample)
-    
-            <div class="panel panel-default" style="width: 100%">
-                <div class="panel-heading">
-                    <span class="label @if($sample->status == 'new') label-primary @elseif($sample->status == 'accepted') label-success @else label-warning @endif m-l-5">
-                        {{$sample->status_title}}
-                    </span>
-                    <div class="pull-right"><a href="panels-wells.html#" data-perform="panel-collapse"><i class="ti-minus text-danger"></i></a> </div>
-                </div>
-                <div class="panel-wrapper collapse in" aria-expanded="true">
-                    <div class="panel-body">
+    <div class="page-wrapper p-t-10">
+        <div class="container-fluid">
+            @if($canSendSampleWork)
+                <div class="white-box">
+                    <h3 class="box-title">ارسال نمونه کار</h3>
+                    <form method="post" enctype="multipart/form-data"
+                          action="{{route('user_level_category.lesson.sample_work.send')}}" class="floating-labels">
+                        @csrf
+                        <input type="hidden" value="{{$lessonId}}" name="lesson_id"/>
+                        <input type="hidden" value="{{$userLevelCategoryId}}" name="user_level_category_id"/>
                         <div class="row">
-                            <div class="media">
-                                <div class="media-left">
-                                    <a href="{{route('user_level_category.lesson.sample_work.image', ["id"=>$sample->id, "isThumbnail"=>0])}}"
-                                        target="_blank">
-                                         <img class="media-object"
-                                              src="{{route('user_level_category.lesson.sample_work.image', ["id"=>$sample->id, "isThumbnail" => true])}}" data-holder-rendered="true" style="width: 64px; height: 64px;"/>
-                                     </a>
-                                </div>
-                                <div class="media-body">
-                                    <p class="media-heading">{{$sample->description}}</p>
-                                </div>
-                            </div>  
-                            @if($sample->master_description != null)  
-                                <div class="media bg-light">
-                                    <div class="media-left">
-                                        <a href="{{route('user_level_category.lesson.sample_work.master_image', ["id"=>$sample->id, "isThumbnail"=>0])}}"
-                                            target="_blank">
-                                            <img class="media-object"
-                                                src="{{route('user_level_category.lesson.sample_work.master_image', ["id"=>$sample->id, "isThumbnail" => true])}}" data-holder-rendered="true" style="width: 64px; height: 64px;"/>
-                                        </a>
-                                    </div>
-                                    <div class="media-body">
-                                        <p class="media-heading">{{$sample->master_description}}</p>
-                                    </div>
-                                </div>                 
-                            @endif
+                            <div class="col-lg-3 form-group">
+                                <input type="file" required name="file" id="input-file-now"
+                                       class="form-control dropify"/></div>
+                            <div class="col-lg-7 form-group">
+                                <textarea class="form-control" rows="4" id="input7" name="description"></textarea><span
+                                    class="highlight"></span> <span class="bar"></span>
+                                <label for="input7">توضیحات</label>
+                            </div>
                         </div>
-                    </div>
-                    @if($sample->status == 'new' && $sample->master_user_id == auth()->id())
-                        @php($sampleWorkId = $sample->id)
-                        <div class="panel-footer">
                         <div class="row">
-                            <div class="col-lg-12">
-                                <button type="button" data-toggle="modal" data-target="#comment-modal"
-                                                        class="model_img btn btn-primary btn-rounded bold pull-left waves-effect waves-light">
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <button type="submit" class="pull-right btn btn-success " style="width: 100%" >ارسال</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            <hr/>
+
+            @endif
+                
+            @foreach($samples as $sample)
+                <div class="row">
+                    <div class="col-lg-8 col-sm-4">
+                        <div
+                            class="panel @if($sample->status == 'new') panel-primary @elseif($sample->status == 'accepted') panel-success @else panel-warning @endif">
+                            <div class="panel-heading">
+                                {{$sample->status_title}}
+                            </div>
+                            <div class="panel-wrapper collapse in" aria-expanded="true">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <a href="{{route('user_level_category.lesson.sample_work.image', ["id"=>$sample->id, "isThumbnail"=>0])}}"
+                                                    target="_blank">
+                                                     <img class="media-object"
+                                                          src="{{route('user_level_category.lesson.sample_work.image', ["id"=>$sample->id, "isThumbnail" => true])}}" data-holder-rendered="true" style="width: 64px; height: 64px;"/>
+                                                 </a>
+                                            </div>
+                                            <span class="media-body">
+                                                <p class="media-heading">{{$sample->description}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if($sample->status == 'new' && $sample->master_user_id == auth()->id())
+                                        @php($sampleWorkId = $sample->id)
+                                        <div class="row">
+                                            <div class="col-lg-12">
+
+                                                <button type="button" data-toggle="modal" data-target="#comment-modal"
+                                                        class="model_img btn btn-rounded btn-default bold text-danger pull-right">
                                                     <i class="fa fa-eye"></i>
                                                     اعمال نظر
                                                 </button>
-                            </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if($sample->master_description != null)
+                                
+                                    <div class="media bg-light">
+                                        <div class="media-left">
+                                            <a href="{{route('user_level_category.lesson.sample_work.master_image', ["id"=>$sample->id, "isThumbnail"=>0])}}"
+                                                target="_blank">
+                                                <img class="media-object"
+                                                    src="{{route('user_level_category.lesson.sample_work.master_image', ["id"=>$sample->id, "isThumbnail" => true])}}" data-holder-rendered="true" style="width: 64px; height: 64px;"/>
+                                            </a>
+                                        </div>
+                                        <span class="media-body">
+                                            <p class="media-heading">
+                                                {!! $sample->master_description !!}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+                                </div>
+                                
                         </div>
-                        
-                        </div>
-                    @endif
-
+                    </div>
                 </div>
-            </div>
-
-    
             @endforeach
+        </div>
 
-    @endsection
+    </div>
+
+@endsection
 
 @section('script')
     <script>

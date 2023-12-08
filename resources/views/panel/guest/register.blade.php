@@ -26,7 +26,7 @@
     <form class="form-horizontal form-material" id="loginform" action="{{route('do_register')}}" method="post">
         @csrf
         <a href="javascript:void(0)" class="text-center db"><img src="{{route('logo')}}" alt="Home"></a>
-        <h3 class="box-title m-t-40 m-b-0">@lang('general.register')</h3>
+        <h3 class="box-title m-t-40 m-b-0 text-light">@lang('general.register')</h3>
         <div class="form-group m-t-20">
             <div class="col-xs-12">
                 <input class="en-input form-control" type="text" name="first_name" required="" placeholder="@lang('general.first_name')">
@@ -54,12 +54,12 @@
         </div>
         <div class="form-group text-center m-t-20">
             <div class="col-xs-12">
-                <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">@lang('general.register')</button>
+                <button class="btn btn-rounded btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">@lang('general.register')</button>
             </div>
         </div>
         <div class="form-group m-b-0">
-            <div class="col-sm-12 text-center">
-                <p>@lang('general.have_any_account_question') <a href="{{route('login')}}" class="text-primary m-l-5"><b>@lang('general.login')</b></a></p>
+            <div class="col-sm-12 text-center text-light">
+                <p class="text-small">@lang('general.have_any_account_question') <a href="{{route('login')}}" class="text-bold text-primary m-l-5"><b>@lang('general.login')</b></a></p>
             </div>
         </div>
     </form>

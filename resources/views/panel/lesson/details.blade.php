@@ -1,9 +1,9 @@
 @extends("panel.layout.layout.main")
 @section("content")
 
-    <div class="panel panel-black">
+    <div class="panel panel-white">
         <div class="panel-heading ">
-            <div class="panel-title " style="color: white !important;">{{$details->title}}</div>
+            <div class="panel-title " >{{$details->title}}</div>
         </div>
         <div class="panel-body">
             @if(count($details->files) >0 || strlen(strip_tags(trim($details->description))) > 0)
@@ -31,16 +31,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="white-box">
-                        {!! $details->description !!}
-                    </div>
-
+<span>
+                    {!! $details->description !!}
+</span>
                     <hr/>
                 </div>
             @endif
             @if($details->lessonContents != null)
                 @foreach($details->lessonContents as $content)
-                    <div class="white-box">
+                    <div class="white-box p-0">
                         {!! $content->content !!}
                     </div>
                     @for($i = 0; $i<count($content->files); $i++)
@@ -69,7 +68,7 @@
         @if($is_passed)
         <div class="panel-footer">
             <div class="white-box">
-                <a class="btn btn-success btn-rounded"
+                <a class="btn btn-info btn-rounded"
                    href="{{route('user_level_category.lesson.sample_work', ['lessonId'=>$details->id, 'userLevelCategoryId'=>$userLevelCategoryId])}}">
                     <i class="fa fa-send"></i>
                     نمونه کار مربوط به درس

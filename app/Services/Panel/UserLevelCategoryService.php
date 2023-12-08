@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserLevelCategory;
 use App\Services\Panel\Auth\IdentityService;
 use App\Services\Panel\Message\MessageService;
+use App\Services\UploaderService;
 use App\ViewModel\Message\SendMessageViewModel;
 use App\ViewModel\Message\SendChangeLevelMessageViewModel;
 use App\ViewModel\UserLevelCategory\GetUserLevelCategoryStudentFilterViewModel;
@@ -21,11 +22,13 @@ class UserLevelCategoryService
 {
     private IdentityService $identityService;
     private MessageService $messageService;
+    private UploaderService $uploaderService;
 
     public function __construct()
     {
         $this->identityService = new IdentityService();
         $this->messageService = new MessageService();
+        $this->uploaderService = new UploaderService();
 
     }
 
@@ -188,12 +191,12 @@ class UserLevelCategoryService
             ->get();
     }
 
-    public function AcceptOrRejectSampleWork($sampleWorkId, $status, $description)
+    public function AcceptOrRejectSampleWork($sampleWorkId, $status, $description, $file = null)
     {
         if ($status == 'accepted') {
             $this->AcceptSampleWork($sampleWorkId, $description);
         } else {
-            $this->RejectSampleWork($sampleWorkId, $description);
+            $this->RejectSampleWork($sampleWorkId, $description, $file);
         }
     }
 
@@ -233,7 +236,7 @@ class UserLevelCategoryService
         Db::commit();
     }
 
-    public function RejectSampleWork($sampleWorkId, $description)
+    public function RejectSampleWork($sampleWorkId, $description, $file=null)
     {
         $sampleWork = LessonSampleWork::join("user_level_categories", "user_level_categories.id", "=", "lesson_sample_works.user_level_category_id")
             ->join("user_level_categories as user_level_category_parent", "user_level_category_parent.id", "=", "user_level_categories.parent_id")
@@ -250,7 +253,22 @@ class UserLevelCategoryService
             abort(403);
         }
         DB::beginTransaction();
-        LessonSampleWork::where("id", $sampleWorkId)->update(["status" => "rejected", "master_description" => $description]);
+        $masterFilePath =null;
+        $masterThumbnailFilePath =null;
+        if($file != null){
+            $currentSampleWork = LessonSampleWork::find($sampleWorkId, ['user_level_category_id', 'lesson_id']);
+            $destinationPath = "sample_work" . DIRECTORY_SEPARATOR . $currentSampleWork->user_level_category_id . DIRECTORY_SEPARATOR . $currentSampleWork->lesson_id;
+            $uploadResult = $this->uploaderService->saveAndResizeImage($file, $destinationPath);
+            $masterFilePath = $uploadResult['original'];
+            $masterThumbnailFilePath = $uploadResult['thumbnail'];
+        }
+        
+        LessonSampleWork::where("id", $sampleWorkId)->update([
+            "status" => "rejected",
+             "master_description" => $description,
+             "master_file_path"=>$masterFilePath,
+             "master_thumbnail_path"=>$masterThumbnailFilePath,
+            ]);
 
         $sendMessageModel = new SendMessageViewModel();
         $sendMessageModel->setSenderUserId(auth()->id());

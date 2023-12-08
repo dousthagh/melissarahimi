@@ -243,6 +243,37 @@ class LessonService
 
         return $response;
     }
+    public function GetMasterSampleWorkImage($sampleWorkId, $isThumbnail = false)
+    {
+        $lessonSampleWork = LessonSampleWork::where("lesson_sample_works.id", $sampleWorkId)
+            ->join("user_level_categories", "user_level_categories.id", "=", "lesson_sample_works.user_level_category_id")
+            ->join("user_level_categories as user_level_category_parent", "user_level_categories.parent_id", "=", "user_level_category_parent.id")
+            ->whereRaw("(user_level_categories.user_id=" . auth()->id() . " or user_level_category_parent.user_id=" . auth()->id() . ")")
+            ->first("lesson_sample_works.*");
+        if (!$lessonSampleWork)
+            abort(403);
+
+        if ($isThumbnail)
+            $filePath = $lessonSampleWork->master_thumbnail_path;
+        else
+            $filePath = $lessonSampleWork->master_file_path;
+
+        $path = Storage::path("sample_work" . DIRECTORY_SEPARATOR . $lessonSampleWork->user_level_category_id . DIRECTORY_SEPARATOR . $lessonSampleWork->lesson_id . DIRECTORY_SEPARATOR . $filePath);
+        if (!File::exists($path)) {
+            abort(404);
+        }
+
+        $file = File::get($path);
+
+        $type = File::mimeType($path);
+
+        $response = Response::make($file, 200);
+
+        $response->header("Content-Type", $type);
+
+
+        return $response;
+    }
 
 
 

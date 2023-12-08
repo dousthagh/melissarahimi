@@ -10,36 +10,36 @@
     @endif
     <div class="container-fluid p-t-10">
         <div class="row">
-            <div class="media">
-                <div class="media-left">
-                    <a href="javascript:void(0)"> <img alt="{{$userLevelCategoryDetails->category_title}}" class="media-object"
-                                                       src="{{route('super_admin.level_category.logo.thumb', ['level_category_id' => $userLevelCategoryDetails->level_category_id])}}"
-                                                       data-holder-rendered="true" style="width: 64px; height: 64px;">
-                    </a>
-                </div>
-                <span class="media-body">
-                    <h5 class="media-heading text-blue">{{$userLevelCategoryDetails->category_title}}</h5>
-                    <span class="text-muted"> {!! $userLevelCategoryDetails->category_description !!}</span>
+            <div class="col-md-12">
+                <div class="media">
+                    <div class="media-left">
+                        <a href="javascript:void(0)"> <img alt="{{$userLevelCategoryDetails->category_title}}" class="media-object"
+                                                           src="{{route('super_admin.level_category.logo.thumb', ['level_category_id' => $userLevelCategoryDetails->level_category_id])}}"
+                                                           data-holder-rendered="true" style="width: 64px; height: 64px;">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading text-blue">{{$userLevelCategoryDetails->category_title}}</h5>
+                    </div>
+                    
                 </div>
             </div>
-
+            
 
             <div class="list-group">
-
                 @foreach($lessons as $value)
-                    <a href="{{(!$userLevelCategoryDetails->expired) ? route('user_level_category.lesson.details', ["userLevelCategoryId"=>$value->user_level_category_id, "lessonId"=>$value->id]) : ''}}" class="list-group-item">
-                        <h4 class="list-group-item-heading ">{{$value->title}}</h4>
-                        <p class="list-group-item-text ">
+                    <a href="{{(!$userLevelCategoryDetails->expired) ? route('user_level_category.lesson.details', ["userLevelCategoryId"=>$value->user_level_category_id, "lessonId"=>$value->id]) : ''}}" class="list-group-item bg-dark">
+                        <h4 class="list-group-item-heading text-light">{{$value->title}}</h4>
+                        <h5 class="list-group-item-text">
                             @if($value->is_passed)
                                 <i class="mdi mdi-check text-success"></i>
                             @else
                                 &nbsp;
                             @endif
-                        </p>
+                        </h5>
                     </a>
                 @endforeach
             </div>
-
 
         </div>
 

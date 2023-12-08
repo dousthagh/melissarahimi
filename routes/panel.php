@@ -146,6 +146,7 @@ Route::middleware(['auth'])->group(function () {
             });
 
             Route::get('sample_work_image/{id}/{isThumbnail}', [LessonController::class, "ShowSampleWorkImage"])->name("user_level_category.lesson.sample_work.image");
+            Route::get('sample_work_master_image/{id}/{isThumbnail}', [LessonController::class, "ShowMasterSampleWorkImage"])->name("user_level_category.lesson.sample_work.master_image");
             Route::prefix("master")->group(function () {
                 Route::get('details/{user_level_category_id}', [MasterController::class, "MasterDetails"])->name("master.details");
                 Route::get('details/download_file/{file_id}', [MasterController::class, "GetMasterFileForDownload"])->name("master.details.file.download");

@@ -71,11 +71,12 @@ class MasterController extends Controller
         $validator = Validator::make($request->toArray(), [
             'sample_work_id' => 'required|exists:lesson_sample_works,id',
             'status' => 'required|in:accepted,rejected',
+            'file' => 'mimes:png,jpg,jpeg',
         ]);
         if (!$validator->getMessageBag()->isEmpty()) {
             return redirect()->back()->withErrors($validator->errors(), 'validator');
         }
-        $this->userLevelCategoryService->AcceptOrRejectSampleWork($request->sample_work_id, $request->status, $request->master_description);
+        $this->userLevelCategoryService->AcceptOrRejectSampleWork($request->sample_work_id, $request->status, $request->master_description, $request->file);
         return redirect()->back();
     }
 

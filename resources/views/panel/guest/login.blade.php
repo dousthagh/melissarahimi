@@ -19,14 +19,14 @@
         </div>
         <div class="form-group text-center m-t-20">
             <div class="col-xs-12">
-                <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light"
+                <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light btn-rounded"
                         type="submit">@lang('general.login')</button>
             </div>
         </div>
 
         <div class="form-group m-b-0">
-            <div class="col-sm-12 text-center">
-                <p>@lang('general.donot_have_any_account_question') <a href="{{route('register')}}" class="text-primary m-l-5"><b>@lang('general.register')</b></a></p>
+            <div class="col-sm-12 text-center text-light">
+                <p class="text-small">@lang('general.donot_have_any_account_question') <a href="{{route('register')}}" class="text-primary m-l-5"><b>@lang('general.register')</b></a></p>
             </div>
         </div>
     </form>

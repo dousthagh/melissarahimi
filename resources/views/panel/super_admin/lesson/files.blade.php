@@ -35,7 +35,7 @@
                             <label class="col-sm-12">انتخاب فایل</label>
                             <div class="col-sm-12">
                                 <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                    <input type="file" required name="file" id="input-file-now"
+                                    <input type="file" required name="file" id="input-file-now" accept=".jpg, .jpeg, .png"
                                            class="form-control dropify"/>
                                 </div>
                             </div>
