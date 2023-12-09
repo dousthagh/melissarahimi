@@ -21,4 +21,11 @@ class UserLevelCategory extends Model
         return $this->hasMany(PassedLesson::class);
     }
 
+    public function parent(){
+        return $this->belongsTo(UserLevelCategory::class, "parent_id", "id");
+    }
+    public function parentUser(){
+        return $this->belongsTo(User::class, "user_id", "id");
+    }
+
 }

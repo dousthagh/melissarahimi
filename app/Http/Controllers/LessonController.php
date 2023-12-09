@@ -30,7 +30,8 @@ class LessonController extends Controller
     {
         $data['lessons'] = $this->lessonService->GetLessonsByUserLevelCategoryId($user_level_category_id);
         $data['userLevelCategoryDetails'] = $this->userLevelCategoryService->getUserLevelCategoryDetails($user_level_category_id);
-        dd($data['userLevelCategoryDetails']);
+
+        $data['count'] = $this->userLevelCategoryService->countOfStudentOfUserLevelCategory($data['userLevelCategoryDetails']->parent_id);
         return view("panel.lesson.list", $data);
     }
 

@@ -57,7 +57,6 @@ class LessonService
                 DB::raw("(select count(id) from passed_lessons where user_level_category_id = $mainUserLevelCategory->id and lesson_id = lessons.id) as is_passed")
             ])
             ->get();
-
         $firstNotPassed = false;
         foreach ($result as $item) {
             $item['show_video'] = false;

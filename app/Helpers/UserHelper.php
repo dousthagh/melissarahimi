@@ -25,6 +25,8 @@ if(!function_exists("GetUserCategoriesWithLevel")){
                 DB::raw("group_concat(parent_user.name) as parent_user_name"),
                 DB::raw("group_concat(user_level_categories.id) as user_level_categories_ids"),
                 DB::raw("group_concat(user_level_categories.parent_id) as user_level_categories_parent_ids"),
+                DB::raw("group_concat(user_level_categories.expire_date) as user_level_categories_expire_date"),
+                DB::raw("group_concat(user_level_categories.created_at) as user_level_categories_created_at"),
             )
             ->get();
         $result = array();
@@ -42,6 +44,8 @@ if(!function_exists("GetUserCategoriesWithLevel")){
             $parentUserNames = explode(",", $value->parent_user_name);
             $userLevelCategoryIds = explode(",", $value->user_level_categories_ids);
             $userLevelCategoriesParentIds = explode(",", $value->user_level_categories_parent_ids);
+            $userLevelCategoriesExpireDate = explode(",", $value->user_level_categories_expire_date);
+            $userLevelCategoriesCreatedDate = explode(",", $value->user_level_categories_created_at);
 
             $categories = array();
             for ($i = 0; $i<count($categoryIds); $i++){
@@ -50,6 +54,8 @@ if(!function_exists("GetUserCategoriesWithLevel")){
                 $categories[$i]['parent_user_name'] = $parentUserNames[$i];
                 $categories[$i]['user_level_category_id'] = $userLevelCategoryIds[$i];
                 $categories[$i]['parent_user_level_category_id'] = $userLevelCategoriesParentIds[$i];
+                $categories[$i]['expire_date'] = $userLevelCategoriesExpireDate[$i];
+                $categories[$i]['created_date'] = $userLevelCategoriesCreatedDate[$i];
             }
             $current['categories'] = $categories;
 

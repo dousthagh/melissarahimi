@@ -262,7 +262,7 @@ class UserLevelCategoryService
             $masterFilePath = $uploadResult['original'];
             $masterThumbnailFilePath = $uploadResult['thumbnail'];
         }
-        
+
         LessonSampleWork::where("id", $sampleWorkId)->update([
             "status" => "rejected",
              "master_description" => $description,
@@ -313,16 +313,18 @@ class UserLevelCategoryService
 
     public function getFirstUserLevelCategory($userId, $userLevelCategoryId, $checkIsActive = true)
     {
-        $userLevelCategory = UserLevelCategory::where("id", $userLevelCategoryId)
+        $userLevelCategory = UserLevelCategory::where("user_level_categories.id", $userLevelCategoryId)
             ->with(['levelCategory'=> function($tblLevelCategory){
                 $tblLevelCategory->with('category');
             }])
-            ->where("user_id", $userId);
+            ->with(['parent'=> function($tbl){
+                $tbl->with("parentUser");
+            }])
+            ->where("user_level_categories.user_id", $userId);
         if ($checkIsActive) {
-            $userLevelCategory = $userLevelCategory->where("is_active", 1);
+            $userLevelCategory = $userLevelCategory->where("user_level_categories.is_active", 1);
         }
         $userLevelCategory = $userLevelCategory->first();
-
         if (!$userLevelCategory)
             abort(403);
 
@@ -344,6 +346,14 @@ class UserLevelCategoryService
         $result['category_title'] = $userLevelCategory->levelCategory->category->title;
         $result['category_description'] = $userLevelCategory->levelCategory->category->description;
         return $result;
+    }
+
+    public function countOfStudentOfUserLevelCategory($userLevelCategoryId){
+        $count = UserLevelCategory::where("parent_id", $userLevelCategoryId)
+            ->where("is_active", 1)
+            ->groupBy("user_id")
+            ->select(['id'])->get()->count();
+        return $count;
     }
 
     public function getUserLevelCategoryDetails($userLevelCategoryId)
