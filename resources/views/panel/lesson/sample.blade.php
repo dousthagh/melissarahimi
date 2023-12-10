@@ -10,10 +10,39 @@
             </ul>
         </div>
     @endif
-    
+    @if($canSendSampleWork)
+        <div class="white-box">
+            <h3 class="box-title">ارسال نمونه کار</h3>
+            <form method="post" enctype="multipart/form-data"
+                  action="{{route('user_level_category.lesson.sample_work.send')}}" class="floating-labels">
+                @csrf
+                <input type="hidden" value="{{$lessonId}}" name="lesson_id"/>
+                <input type="hidden" value="{{$userLevelCategoryId}}" name="user_level_category_id"/>
+                <div class="row">
+                    <div class="col-lg-3 form-group">
+                        <input type="file" required name="file" id="input-file-now"
+                               class="form-control dropify"/></div>
+                    <div class="col-lg-7 form-group">
+                        <textarea class="form-control" rows="4" id="input7" name="description"></textarea><span
+                            class="highlight"></span> <span class="bar"></span>
+                        <label for="input7">توضیحات</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <button type="submit" class="pull-right btn btn-success " style="width: 100%" >ارسال</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr/>
+
+    @endif
 
 @foreach ($samples as $sample)
-    
+
             <div class="panel panel-default" style="width: 100%">
                 <div class="panel-heading">
                     <span class="label @if($sample->status == 'new') label-primary @elseif($sample->status == 'accepted') label-success @else label-warning @endif m-l-5">
@@ -35,8 +64,8 @@
                                 <div class="media-body">
                                     <p class="media-heading">{{$sample->description}}</p>
                                 </div>
-                            </div>  
-                            @if($sample->master_description != null)  
+                            </div>
+                            @if($sample->master_description != null)
                                 <div class="media bg-light">
                                     <div class="media-left">
                                         <a href="{{route('user_level_category.lesson.sample_work.master_image', ["id"=>$sample->id, "isThumbnail"=>0])}}"
@@ -48,7 +77,7 @@
                                     <div class="media-body">
                                         <p class="media-heading">{{$sample->master_description}}</p>
                                     </div>
-                                </div>                 
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -64,14 +93,14 @@
                                                 </button>
                             </div>
                         </div>
-                        
+
                         </div>
                     @endif
 
                 </div>
             </div>
 
-    
+
             @endforeach
 
     @endsection
