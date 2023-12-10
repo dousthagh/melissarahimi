@@ -146,7 +146,7 @@ class LessonContentService
                     $contentFile->lesson_content_id = $content->id;
                     $contentFile->file_path = $result['file_name'];
                     $contentFile->postfix = $result['postfix'];
-                    $contentFile->secret_key = Str::uuid();;
+                    $contentFile->secret_key = Str::uuid();
 
                     $contentFile->save();
                 }

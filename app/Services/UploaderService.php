@@ -7,6 +7,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use PHPUnit\Exception;
 
@@ -16,7 +17,7 @@ class UploaderService
     {
         try {
             $destinationAddress = Storage::path($savePath) . DIRECTORY_SEPARATOR;
-            $imagesName = date('ymdhis') . '.' . $file->getClientOriginalExtension();
+            $imagesName = now()->getTimestampMs() . str_replace('-','',Str::uuid()) . '.' . $file->getClientOriginalExtension();
 //            if (!file_exists($destinationAddress)) {
 //                dd("here");
 //                mkdir($destinationAddress);
