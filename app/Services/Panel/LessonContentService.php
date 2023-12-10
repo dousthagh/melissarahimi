@@ -137,7 +137,8 @@ class LessonContentService
             DB::beginTransaction();
             $content->save();
             if($model->getFiles()) {
-                foreach ($model->getFiles() as $file) {
+                for ($i = 0; $i<count($model->getFiles()); $i++){
+                    $file = $model->getFiles()[$i];
                     $destinationAddress = "content" . DIRECTORY_SEPARATOR . $content->id;
                     $result = $this->uploaderService->saveFile($file, $destinationAddress);
 
