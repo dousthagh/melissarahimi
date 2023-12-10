@@ -67,13 +67,15 @@
                             </div>
                             @if($sample->master_description != null)
                                 <div class="media bg-light">
-                                    <div class="media-left">
-                                        <a href="{{route('user_level_category.lesson.sample_work.master_image', ["id"=>$sample->id, "isThumbnail"=>0])}}"
-                                            target="_blank">
-                                            <img class="media-object"
-                                                src="{{route('user_level_category.lesson.sample_work.master_image', ["id"=>$sample->id, "isThumbnail" => true])}}" data-holder-rendered="true" style="width: 64px; height: 64px;"/>
-                                        </a>
-                                    </div>
+                                    @if(!empty($sample->master_file_path))
+                                        <div class="media-left">
+                                            <a href="{{route('user_level_category.lesson.sample_work.master_image', ["id"=>$sample->id, "isThumbnail"=>0])}}"
+                                                target="_blank">
+                                                <img class="media-object"
+                                                    src="{{route('user_level_category.lesson.sample_work.master_image', ["id"=>$sample->id, "isThumbnail" => true])}}" data-holder-rendered="true" style="width: 64px; height: 64px;"/>
+                                            </a>
+                                        </div>
+                                    @endif
                                     <div class="media-body">
                                         <p class="media-heading">{{$sample->master_description}}</p>
                                     </div>
