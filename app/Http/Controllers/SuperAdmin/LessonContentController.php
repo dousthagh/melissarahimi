@@ -66,6 +66,10 @@ class LessonContentController extends Controller
     {
         return $this->contentService->GetLessonContentFile($key, $lessonContentId, $privateKey);
     }
+    public function GetLessonContentFileAddressBySecretKeyByAdmin($key, $lessonContentId, $privateKey)
+    {
+        return $this->contentService->GetLessonContentFile($key, $lessonContentId, $privateKey, true);
+    }
 
     public function Delete($id, $lessonId)
     {

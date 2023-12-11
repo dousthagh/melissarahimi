@@ -42,7 +42,7 @@
                                  onclick="doRemove(this)" index="{{$index}}" myid="{{$content->files[$index]->id}}"></i>
                           </div>
                           <div class="col-md-5">
-                              <a target="_blank" href="{{route('lesson.content.files.address', ['key'=>$content->files[$index]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}" class="text-info"> {{$content->files[$index]->file_path}}</a>
+                              <a target="_blank" href="{{route('super_admin.lesson.content.files.address', ['key'=>$content->files[$index]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}" class="text-info"> {{$content->files[$index]->file_path}}</a>
                           </div>
                       </div>
                   @endfor

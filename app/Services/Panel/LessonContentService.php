@@ -53,27 +53,30 @@ class LessonContentService
             ->get();
     }
 
-    public function GetContentDetails($contentId){
+    public function GetContentDetails($contentId)
+    {
         return LessonContent::where("id", $contentId)
             ->first();
     }
 
-    public function GetLessonContentFileAddressBySecretKey($secretKey, $lessonContentId, $privateKey)
+    public function GetLessonContentFileAddressBySecretKey($secretKey, $lessonContentId, $privateKey, $isAdmin)
     {
         ini_set('memory_limit', '-1');
         $isValidPrivateKey = $this->secretKeyService->isCorrectKey($privateKey);
-        if(!$isValidPrivateKey){
+        if (!$isValidPrivateKey) {
             abort(403);
         }
-        $userId = auth()->id();
         $lessonContentFile = LessonContentFiles::where("secret_key", $secretKey)
             ->where("lesson_content_id", $lessonContentId)
-            ->where("user_level_categories.user_id", $userId)
             ->join("lesson_contents", "lesson_contents.id", "=", "lesson_content_files.lesson_content_id")
             ->join("lessons", "lessons.id", "=", "lesson_contents.lesson_id")
             ->join("level_categories", "level_categories.id", "=", "lessons.level_category_id")
-            ->join("user_level_categories", "level_categories.id", "=", "user_level_categories.level_category_id")
-            ->first(["lesson_content_files.file_path", "lesson_content_files.postfix", "lesson_content_files.lesson_content_id"]);
+            ->join("user_level_categories", "level_categories.id", "=", "user_level_categories.level_category_id");
+        if ($isAdmin) {
+            $userId = auth()->id();
+            $lessonContentFile = $lessonContentFile->where("user_level_categories.user_id", $userId);
+        }
+        $lessonContentFile = $lessonContentFile->first(["lesson_content_files.file_path", "lesson_content_files.postfix", "lesson_content_files.lesson_content_id"]);
 
 
         if ($lessonContentFile)
@@ -82,9 +85,9 @@ class LessonContentService
         return null;
     }
 
-    public function GetLessonContentFile($key, $lessonContentId, $privateKey)
+    public function GetLessonContentFile($key, $lessonContentId, $privateKey, $isAdmin = false)
     {
-        $lessonContentFile = $this->GetLessonContentFileAddressBySecretKey($key, $lessonContentId, $privateKey);
+        $lessonContentFile = $this->GetLessonContentFileAddressBySecretKey($key, $lessonContentId, $privateKey, $isAdmin);
         if (!$lessonContentFile) {
             abort(403);
         }
@@ -125,9 +128,9 @@ class LessonContentService
 
         $content->content = $model->getContent();
 
-        if($model->getDeletedFilesId()){
+        if ($model->getDeletedFilesId()) {
             $fileIdThatShouldBeDeleted = json_decode($model->getDeletedFilesId());
-            foreach ($fileIdThatShouldBeDeleted as $fileId){
+            foreach ($fileIdThatShouldBeDeleted as $fileId) {
                 $this->deleteFile($fileId);
             }
         }
@@ -136,8 +139,8 @@ class LessonContentService
         try {
             DB::beginTransaction();
             $content->save();
-            if($model->getFiles()) {
-                for ($i = 0; $i<count($model->getFiles()); $i++){
+            if ($model->getFiles()) {
+                for ($i = 0; $i < count($model->getFiles()); $i++) {
                     $file = $model->getFiles()[$i];
                     $destinationAddress = "content" . DIRECTORY_SEPARATOR . $content->id;
                     $result = $this->uploaderService->saveFile($file, $destinationAddress);
@@ -158,20 +161,21 @@ class LessonContentService
         }
     }
 
-    public function DeleteContent($id){
+    public function DeleteContent($id)
+    {
         $content = LessonContent::find($id);
         $files = $content->files;
         $content->delete();
-        foreach ($files as $file){
+        foreach ($files as $file) {
             $this->deleteFile($file->id);
         }
     }
 
 
-
-    private function deleteFile($id){
+    private function deleteFile($id)
+    {
         $lessonContentFile = LessonContentFiles::find($id);
-        $fullPath = "content".DIRECTORY_SEPARATOR.$lessonContentFile->lesson_content_id;
+        $fullPath = "content" . DIRECTORY_SEPARATOR . $lessonContentFile->lesson_content_id;
         $this->uploaderService->unlink($fullPath, $lessonContentFile->file_path);
         $lessonContentFile->delete();
     }

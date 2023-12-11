@@ -58,6 +58,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['auth.super_admin'])->group(function () {
 
+        Route::get("get_content_file_address_by_admin/{key}/{lesson_content_id}/{private_key}", [LessonContentController::class, "GetLessonContentFileAddressBySecretKeyByAdmin"])->name("super_admin.lesson.content.files.address");
+
+
         Route::prefix("course")->group(function () {
                 Route::get('index/{level_category_id}', [CourseController::class, "GetCoursesOfLevelCategoryId"])->name('super_admin.course.index');
                 Route::get('details/{course_id}', [CourseController::class, "GetCourseDetails"])->name('super_admin.course.details');
