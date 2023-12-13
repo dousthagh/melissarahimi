@@ -89,25 +89,34 @@ class LessonService
             ->first();
     }
 
-    public function GetLessonFileAddressBySecretKey($secretKey, $userLevelCategoryId, $privateKey)
+    public function GetLessonDetailsWithContent($lessonId)
+    {
+        return Lesson::where("id", $lessonId)
+            ->with(["files" => function ($table) {
+                $table->where("lesson_files.is_active", 1);
+                $table->orderBy("lesson_files.sort_order");
+            }])
+            ->with(['lessonContents'=>function($table){
+                $table->with('files');
+            }])
+            ->first();
+    }
+
+    public function GetLessonFileAddressBySecretKey($secretKey, $userLevelCategoryId, $privateKey, $isAdmin)
     {
         ini_set('memory_limit', '-1');
         $userId = auth()->id();
         $lessonFiles = LessonFile::join("lessons", "lessons.id", "=", "lesson_files.lesson_id")
-            ->join("level_categories", "lessons.level_category_id", "=", "level_categories.id")
-            ->join("user_level_categories", "level_categories.id", "=", "user_level_categories.level_category_id")
-            ->leftJoin("passed_lessons", "passed_lessons.lesson_id", "=", DB::raw("lessons.id and passed_lessons.user_level_category_id = $userLevelCategoryId"))
-            ->where("user_level_categories.id", $userLevelCategoryId)
-            ->where("secret_key", $secretKey)
-//            ->whereRaw("(passed_lessons.id is not null ||
-//       lesson_files.lesson_id = (select min(id)
-//                                 from lessons
-//                                 where lessons.level_category_id = level_categories.id
-//                                   and lessons.id not in (select passed_lessons.lesson_id
-//                                                          from passed_lessons
-//                                                          where passed_lessons.user_level_category_id = user_level_categories.id)))")
-            ->where("user_level_categories.user_id", $userId)
-            ->first(["lesson_files.file_path", "lesson_files.postfix", "lesson_files.lesson_id"]);
+            ->where("secret_key", $secretKey);
+
+        if(!$isAdmin){
+            $lessonFiles = $lessonFiles->leftJoin("passed_lessons", "passed_lessons.lesson_id", "=", DB::raw("lessons.id and passed_lessons.user_level_category_id = $userLevelCategoryId"))
+                ->join("level_categories", "lessons.level_category_id", "=", "level_categories.id")
+                ->join("user_level_categories", "level_categories.id", "=", "user_level_categories.level_category_id")
+                ->where("user_level_categories.id", $userLevelCategoryId)
+                ->where("user_level_categories.user_id", $userId);
+        }
+        $lessonFiles = $lessonFiles->first(["lesson_files.file_path", "lesson_files.postfix", "lesson_files.lesson_id"]);
         if ($lessonFiles)
             return $lessonFiles;
 
@@ -276,9 +285,9 @@ class LessonService
 
 
 
-    public function GetLessonFile($key, $userLevelCategoryId, $privateKey)
+    public function GetLessonFile($key, $userLevelCategoryId, $privateKey, $isAdmin)
     {
-        $lessonFile = $this->GetLessonFileAddressBySecretKey($key, $userLevelCategoryId, $privateKey);
+        $lessonFile = $this->GetLessonFileAddressBySecretKey($key, $userLevelCategoryId, $privateKey, $isAdmin);
 
         if (!$lessonFile) {
             abort(403);

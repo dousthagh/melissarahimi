@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth.super_admin'])->group(function () {
 
         Route::get("get_content_file_address_by_admin/{key}/{lesson_content_id}/{private_key}", [LessonContentController::class, "GetLessonContentFileAddressBySecretKeyByAdmin"])->name("super_admin.lesson.content.files.address");
+        Route::get("get_address_by_admin/{key}/{private_key}", [\App\Http\Controllers\SuperAdmin\LessonController::class, "GetLessonFileAddressBySuperAdmin"])->name("super_admin.lesson.files.address");
 
         Route::prefix("all_student")->group(function () {
             Route::get("/{user_level_category_id}", [StudentController::class, "GetAllStudentWithUserLevelCategoryId"])->name("super_admin.master.all_student.list");
@@ -112,6 +113,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('index/{level_category_id}', [\App\Http\Controllers\SuperAdmin\LessonController::class, "GetLessonsOfLevelCategoryId"])->name('super_admin.lesson.index');
             Route::get('details/{lesson_id}', [\App\Http\Controllers\SuperAdmin\LessonController::class, "GetLessonsDetails"])->name('super_admin.lesson.details');
+            Route::get('preview/{lesson_id}', [\App\Http\Controllers\SuperAdmin\LessonController::class, "GetLessonDetailsWithContentForPreviewInAdmin"])->name('super_admin.lesson.preview');
             Route::get('files/{lesson_id}', [\App\Http\Controllers\SuperAdmin\LessonController::class, "LessonFile"])->name('super_admin.lesson.files');
             Route::get('delete_file/{id}', [\App\Http\Controllers\SuperAdmin\LessonController::class, "DeleteLessonFile"])->name('super_admin.lesson.files.delete');
             Route::post('save_file', [\App\Http\Controllers\SuperAdmin\LessonController::class, "SaveLessonFile"])->name('super_admin.lesson.files.save');

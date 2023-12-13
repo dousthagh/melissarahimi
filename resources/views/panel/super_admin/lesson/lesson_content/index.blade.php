@@ -3,9 +3,15 @@
     <div class="white-box">
         <div class="row">
             <div class="col-lg-2 col-sm-4 col-xs-4">
-                <a type="button" class="btn btn-primary btn-circle btn-sm"
+                <a type="button" class="btn btn-primary btn-rounded "
                    href="{{route('super_admin.lesson.content.new', ['lesson_id'=>$lesson_id])}}">
+                    افزودن
                     <i class="fa fa-plus"></i>
+                </a>
+                <a href="{{route('super_admin.lesson.preview', ['lesson_id'=>$lesson_id])}}" target="_blank"
+                   class="btn btn-default btn-rounded waves-effect waves-light m-r-10">
+                    <i class="fa fa-solid fa-eye"></i>
+                     نمایش
                 </a>
             </div>
         </div>
@@ -34,6 +40,7 @@
                 @foreach($contents as $content)
                     <div class="panel">
                         <div class="panel-body">
+                            <span class="label-rounded label-warning"> {{$content->id}}</span>
                             @if(!empty($content->content))
                                 {!! $content->content !!}
                             @else

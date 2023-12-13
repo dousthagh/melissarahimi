@@ -16,7 +16,6 @@
         @elseif(Session::get("state") == "0")
             <div class="alert alert-danger"><p>متاسفانه عملیات با موفقیت انجام نشد</p></div>
         @endif
-
         <div class="row">
             <div class="col-sm-12">
                 <div class="white-box">
@@ -54,6 +53,11 @@
                                class="btn btn-default btn-rounded waves-effect waves-light m-r-10">
                                 <i class="fa fa-solid fa-book"></i>
                                 محتوا
+                            </a>
+                            <a href="{{route('super_admin.lesson.preview', ['lesson_id'=>$lesson->id])}}" target="_blank"
+                               class="btn btn-default btn-rounded waves-effect waves-light m-r-10">
+                                <i class="fa fa-solid fa-eye"></i>
+                                 نمایش
                             </a>
                         </div>
                     </form>

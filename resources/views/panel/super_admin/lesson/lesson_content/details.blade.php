@@ -58,11 +58,17 @@
       </div>
 
       <div class="form-group">
-          <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">ذخیره</button>
+          <button type="submit" class="btn btn-success btn-rounded waves-effect waves-light m-r-10">ذخیره</button>
+          <a href="{{route('super_admin.lesson.preview', ['lesson_id'=>$content->lesson_id])}}" target="_blank"
+             class="btn btn-default btn-rounded waves-effect waves-light m-r-10">
+              <i class="fa fa-solid fa-eye"></i>
+               نمایش
+          </a>
           <span class="text-muted">
               <a type="submit" class="btn btn-outline waves-effect waves-light m-r-10"
                  href="{{route('super_admin.lesson.content.index', ['lesson_id'=>$content->lesson_id])}}">بازگشت</a>
           </span>
+
       </div>
   </form>
     </div>

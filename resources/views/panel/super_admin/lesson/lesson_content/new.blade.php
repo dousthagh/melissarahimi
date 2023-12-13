@@ -12,7 +12,14 @@
             </div>
         @endif
         @if(Session::get("state") == "1")
-            <div class="alert alert-success"><p>عملیات با موفقیت انجام شد</p></div>
+            <div class="alert alert-success"><p>عملیات با موفقیت انجام شد
+                    <span class="m-l-5"></span>
+                    <a href="{{route('super_admin.lesson.preview', ['lesson_id'=>$lesson_id])}}"
+                       class="btn btn-default btn-rounded waves-effect waves-light m-r-10">
+                        <i class="fa fa-solid fa-eye"></i>
+                        نمایش
+                    </a>
+                </p></div>
         @elseif(Session::get("state") == "0")
             <div class="alert alert-danger"><p>متاسفانه عملیات با موفقیت انجام نشد</p></div>
         @endif

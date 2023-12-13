@@ -50,10 +50,13 @@ class LessonController extends Controller
         return view("panel.lesson.details", $data);
     }
 
+
+
     public function GetLessonFileAddressBySecretKey($key, $userLevelCategoryId, $privateKey)
     {
-        return $this->lessonService->GetLessonFile($key, $userLevelCategoryId, $privateKey);
+        return $this->lessonService->GetLessonFile($key, $userLevelCategoryId, $privateKey, false);
     }
+
 
     public function ShowSampleWorkImage($sampleWorkId, $isThumbnail)
     {

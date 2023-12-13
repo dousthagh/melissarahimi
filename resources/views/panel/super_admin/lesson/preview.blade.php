@@ -23,7 +23,7 @@
                                     @if(in_array(strtolower($details->files[$i]->postfix), ['.png', '.jpeg', '.jpg']))
                                         <div class="item @if($i==0) active  @endif">
                                             <img
-                                                src="{{route('user_level_category.lesson.files.address', ['key'=>$details->files[$i]->secret_key, 'userLevelCategoryId'=>$userLevelCategoryId, 'private_key'=>$key])}}"
+                                                src="{{route('super_admin.lesson.files.address', ['key'=>$details->files[$i]->secret_key, 'private_key'=>$key])}}"
                                                 alt="{{$details->files[$i]->title}}">
                                         </div>
                                     @endif
@@ -40,6 +40,7 @@
             @if($details->lessonContents != null)
                 @foreach($details->lessonContents as $content)
                     <div class="white-box p-0">
+                        <span class="label-rounded label-warning"> {{$content->id}}</span>
                         {!! $content->content !!}
                     </div>
                     @for($i = 0; $i<count($content->files); $i++)
@@ -54,9 +55,9 @@
                                                 type="video/mp4"/>
                                         </video>
                                     @elseif(in_array(strtolower($content->files[$i]->postfix), ['png', 'jpeg', 'jpg', 'tif']))
-                                        <a href="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}">
+                                        <a href="{{route('super_admin.lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}">
                                             <img alt="{{$content->files[$i]->title}}"
-                                                 src="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}"
+                                                 src="{{route('super_admin.lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}"
                                                  class="img-responsive model_img" id="sa-image"/>
                                         </a>
                                     @endif
@@ -67,17 +68,6 @@
                 @endforeach
             @endif
         </div>
-        @if($is_passed && $details->with_sample_work)
-            <div class="panel-footer">
-                <div class="white-box">
-                    <a class="btn btn-info btn-rounded"
-                       href="{{route('user_level_category.lesson.sample_work', ['lessonId'=>$details->id, 'userLevelCategoryId'=>$userLevelCategoryId])}}">
-                        <i class="fa fa-send"></i>
-                        نمونه کار مربوط به درس
-                    </a>
-                </div>
-            </div>
-        @endif
     </div>
 @endsection
 

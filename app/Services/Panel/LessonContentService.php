@@ -72,7 +72,7 @@ class LessonContentService
             ->join("lessons", "lessons.id", "=", "lesson_contents.lesson_id")
             ->join("level_categories", "level_categories.id", "=", "lessons.level_category_id")
             ->join("user_level_categories", "level_categories.id", "=", "user_level_categories.level_category_id");
-        if ($isAdmin) {
+        if (!$isAdmin) {
             $userId = auth()->id();
             $lessonContentFile = $lessonContentFile->where("user_level_categories.user_id", $userId);
         }
