@@ -11,6 +11,7 @@ use App\Http\Controllers\SuperAdmin\SettingController;
 use App\Http\Controllers\SuperAdmin\UserManagementController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\SuperAdmin\StudentController;
 use App\Mail\ReduceLevelMail;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +61,10 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get("get_content_file_address_by_admin/{key}/{lesson_content_id}/{private_key}", [LessonContentController::class, "GetLessonContentFileAddressBySecretKeyByAdmin"])->name("super_admin.lesson.content.files.address");
 
+        Route::prefix("all_student")->group(function () {
+            Route::get("/{user_level_category_id}", [StudentController::class, "GetAllStudentWithUserLevelCategoryId"])->name("super_admin.master.all_student.list");
+            Route::get("/sample_work/{lessonId}/{userLevelCategoryId}", [MasterController::class, "MyStudentSampleWorkList"])->name("user_level_category.master.my_student.sample_work.details");
+        });
 
         Route::prefix("course")->group(function () {
                 Route::get('index/{level_category_id}', [CourseController::class, "GetCoursesOfLevelCategoryId"])->name('super_admin.course.index');

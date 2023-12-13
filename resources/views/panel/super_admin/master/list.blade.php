@@ -40,6 +40,8 @@
                         <td>
                             <a href="{{route('super_admin.master.update_details', ['user_level_category_id' => $master->user_level_category_id])}}"
                                class="btn btn-primary">فایل ها</a>
+                            <a href="{{route('super_admin.master.all_student.list', ['user_level_category_id' => $master->user_level_category_id])}}"
+                               class="btn btn-success">هنرجوها</a>
                         </td>
                     </tr>
                 @endforeach
