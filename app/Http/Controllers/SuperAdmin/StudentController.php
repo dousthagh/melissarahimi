@@ -14,7 +14,12 @@ class StudentController extends Controller
     }
     public function GetAllStudentWithUserLevelCategoryId($parentUserLevelCategoryId)
     {
-        $data['students'] = $this->allStudentService->GetAllStudentWithMaster($parentUserLevelCategoryId);  
+        $data['students'] = $this->allStudentService->GetAllStudentWithMaster($parentUserLevelCategoryId);
         return view("panel.super_admin.master.all_student.all_students_list", $data);
+    }
+    public function GetAllStudentWithUserLevelCategoryIdHistories($parentUserLevelCategoryId, $levelCategoryId, $userId)
+    {
+        $data['students'] = $this->allStudentService->GetHistories($parentUserLevelCategoryId, $levelCategoryId, $userId);
+        return view("panel.super_admin.master.all_student.all_students_history_list", $data);
     }
 }

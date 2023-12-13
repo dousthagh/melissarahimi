@@ -63,17 +63,17 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix("all_student")->group(function () {
             Route::get("/{user_level_category_id}", [StudentController::class, "GetAllStudentWithUserLevelCategoryId"])->name("super_admin.master.all_student.list");
-            Route::get("/sample_work/{lessonId}/{userLevelCategoryId}", [MasterController::class, "MyStudentSampleWorkList"])->name("user_level_category.master.my_student.sample_work.details");
+            Route::get("history/{parent_id}/{level_category_d}/{user_id}", [StudentController::class, "GetAllStudentWithUserLevelCategoryIdHistories"])->name("super_admin.master.all_student.history");
         });
 
         Route::prefix("course")->group(function () {
-                Route::get('index/{level_category_id}', [CourseController::class, "GetCoursesOfLevelCategoryId"])->name('super_admin.course.index');
-                Route::get('details/{course_id}', [CourseController::class, "GetCourseDetails"])->name('super_admin.course.details');
-                Route::get('new/{level_category_id}', [CourseController::class, "NewCourse"])->name('super_admin.course.new');
-                Route::get('files/{course_id}', [CourseController::class, "CourseFiles"])->name('super_admin.course.files');
-                Route::get('delete_file/{id}', [CourseController::class, "DeleteCourseFile"])->name('super_admin.course.files.delete');
-                Route::post('save_file', [CourseController::class, "SaveCourseFile"])->name('super_admin.course.files.save');
-                Route::post('details/save', [CourseController::class, "SaveCourse"])->name('super_admin.course.details.save');
+            Route::get('index/{level_category_id}', [CourseController::class, "GetCoursesOfLevelCategoryId"])->name('super_admin.course.index');
+            Route::get('details/{course_id}', [CourseController::class, "GetCourseDetails"])->name('super_admin.course.details');
+            Route::get('new/{level_category_id}', [CourseController::class, "NewCourse"])->name('super_admin.course.new');
+            Route::get('files/{course_id}', [CourseController::class, "CourseFiles"])->name('super_admin.course.files');
+            Route::get('delete_file/{id}', [CourseController::class, "DeleteCourseFile"])->name('super_admin.course.files.delete');
+            Route::post('save_file', [CourseController::class, "SaveCourseFile"])->name('super_admin.course.files.save');
+            Route::post('details/save', [CourseController::class, "SaveCourse"])->name('super_admin.course.details.save');
         });
 
         Route::prefix('setting')->group(function () {
@@ -126,7 +126,6 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth.master'])->prefix("master")->prefix('level_category')->group(function () {
         Route::get('my_levels/{userLevelCategoryParentId}', [LevelCategoryController::class, "GetCurrentMasterLevelCategories"])->name('master.level_category.current_master_level_categories');
     });
-
 
 
     Route::prefix("user_level_category")->group(function () {
