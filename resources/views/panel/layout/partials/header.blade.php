@@ -18,6 +18,7 @@
     <link href="{{asset('panel/css/animate.css')}}" rel="stylesheet">
     <!-- This is a Custom CSS -->
     <link href="{{asset('panel/css/style.css')}}" rel="stylesheet">
+    <link href="{{asset('panel/css/style_toggle_button.css')}}" rel="stylesheet">
     <!-- color CSS you can use different color css from css/colors folder -->
     <!-- We have chosen the skin-blue (default.css) for this starter
          page. However, you can choose any other skin from folder css / colors .

@@ -353,6 +353,7 @@ class LessonService
 
         $lesson->title = $model->getTitle();
         $lesson->description = $model->getDescription();
+        $lesson->with_sample_work = $model->getWithSampleWork();
         $lesson->save();
     }
 

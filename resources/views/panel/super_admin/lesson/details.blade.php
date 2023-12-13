@@ -24,12 +24,21 @@
                         @csrf
                         <input type="hidden" value="{{$lesson->id}}" name="id"/>
                         <div class="form-group">
+                            <label class="col-md-12">نیاز به نمونه کار</label>
+                            <div class="col-md-12">
+                                <label class="switch">
+                                    <input type="checkbox" @if($lesson->with_sample_work) checked @endif name="with_sample_work">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label class="col-md-12">عنوان</label>
                             <div class="col-md-12">
                                 <input type="text" class="form-control" name="title" value="{{$lesson->title}}"></div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-12">توضیحات</label>
                             <div id="editor" style="min-height:200px;">
                                 {!! $lesson->description !!}
                             </div>
@@ -38,12 +47,17 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">ذخیره</button>
+                            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10 btn-rounded">
+                                ذخیره
+                            </button>
+                            <a href="{{route('super_admin.lesson.content.index', ['lesson_id'=>$lesson->id])}}"
+                               class="btn btn-default btn-rounded waves-effect waves-light m-r-10">
+                                <i class="fa fa-solid fa-book"></i>
+                                محتوا
+                            </a>
                         </div>
                     </form>
-                </div>
-                <div class="white-box">
-                    <a href="{{route('super_admin.lesson.content.index', ['lesson_id'=>$lesson->id])}}" class="btn btn-info waves-effect waves-light m-r-10">محتوا</a>
+
                 </div>
             </div>
         </div>

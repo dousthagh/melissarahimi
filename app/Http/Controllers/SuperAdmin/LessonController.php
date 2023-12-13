@@ -38,6 +38,7 @@ class LessonController extends Controller
             if(isset($request->id))
                 $viewModel->setId($request->id);
 
+            $viewModel->setWithSampleWork( $request->with_sample_work == 'on');
             $this->courseService->SaveLesson($viewModel);
             return redirect()->back()->with('state', 1);
         }catch (\Exception $exception){

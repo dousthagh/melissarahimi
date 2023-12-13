@@ -7,6 +7,7 @@ class SaveLessonViewModel
     private $id = 0;
     private $title;
     private $description;
+    private $withSampleWork;
 
     /**
      * @return mixed
@@ -55,5 +56,22 @@ class SaveLessonViewModel
     {
         $this->description = $description;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getWithSampleWork() : bool
+    {
+        return $this->withSampleWork;
+    }
+
+    /**
+     * @param mixed $withSampleWork
+     */
+    public function setWithSampleWork($withSampleWork): void
+    {
+        $this->withSampleWork = $withSampleWork;
+    }
+
 
 }

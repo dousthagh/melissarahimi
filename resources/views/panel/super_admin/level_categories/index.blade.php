@@ -28,6 +28,7 @@
                         <a target="_blank"
                            href="{{route('super_admin.level_category.logo', ['level_category_id' => $levelCategory->id])}}">
                             <img
+                                alt="{{$levelCategory->level_title}}"
                                 src="{{route('super_admin.level_category.logo.thumb', ['level_category_id' => $levelCategory->id])}}"
                                 style="width: 50px; height:50px;"/>
                         </a>
@@ -37,14 +38,11 @@
                         <p class="text-muted">{{$levelCategory->level_title}}</p>
                     </td>
                     <td >
-                        <a type="button" class="btn btn-primary btn-circle btn-sm" href="{{route('super_admin.course.index', ['level_category_id' => $levelCategory->id])}}">
-                            <i class="fa fa-solid fa-book"></i>
-                        </a>
 
                         @if($levelCategory->level_sort_order == 1)
                             <a class="btn btn-info btn-rounded"
                                href="{{route('super_admin.lesson.index', ['level_category_id' => $levelCategory->id])}}">
-                               <i class="fa fa-solid fa-list"></i> 
+                               <i class="fa fa-solid fa-list"></i>
                             </a>
                         @endif
                         <a class="btn btn-success btn-rounded"
