@@ -3,7 +3,7 @@
 
     <div class="panel panel-white">
         <div class="panel-heading ">
-            <div class="panel-title " >{{$details->title}}</div>
+            <div class="panel-title ">{{$details->title}}</div>
         </div>
         <div class="panel-body">
             @if(count($details->files) >0 || strlen(strip_tags(trim($details->description))) > 0)
@@ -31,9 +31,9 @@
                             </div>
                         </div>
                     </div>
-<span>
-                    {!! $details->description !!}
-</span>
+                    <span>
+                        {!! $details->description !!}
+                    </span>
                     <hr/>
                 </div>
             @endif
@@ -65,23 +65,23 @@
                 @endforeach
             @endif
         </div>
-        @if($is_passed)
-        <div class="panel-footer">
-            <div class="white-box">
-                <a class="btn btn-info btn-rounded"
-                   href="{{route('user_level_category.lesson.sample_work', ['lessonId'=>$details->id, 'userLevelCategoryId'=>$userLevelCategoryId])}}">
-                    <i class="fa fa-send"></i>
-                    نمونه کار مربوط به درس
-                </a>
+        @if($is_passed && $details->with_sample_work)
+            <div class="panel-footer">
+                <div class="white-box">
+                    <a class="btn btn-info btn-rounded"
+                       href="{{route('user_level_category.lesson.sample_work', ['lessonId'=>$details->id, 'userLevelCategoryId'=>$userLevelCategoryId])}}">
+                        <i class="fa fa-send"></i>
+                        نمونه کار مربوط به درس
+                    </a>
+                </div>
             </div>
-        </div>
         @endif
     </div>
 @endsection
 
 @section('script')
     <script>
-        document.addEventListener('contextmenu', function(e) {
+        document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
     </script>

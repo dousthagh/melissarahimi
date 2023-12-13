@@ -73,7 +73,7 @@ class LessonService
         return $result;
     }
 
-    public function GetLessonDetailsForCurrentUserLevelCategoryId($lessonId, $userLevelCategoryId)
+    public function     GetLessonDetailsForCurrentUserLevelCategoryId($lessonId, $userLevelCategoryId)
     {
         return Lesson::where("id", $lessonId)
             ->with(["files" => function ($table) {
@@ -321,6 +321,7 @@ class LessonService
        lessons.id = (select min(id)
                                  from lessons
                                  where lessons.level_category_id = level_categories.id
+                                 and lessons.with_sample_work = 1
                                    and lessons.id not in (select passed_lessons.lesson_id
                                                           from passed_lessons
                                                           where passed_lessons.user_level_category_id = user_level_categories.id)))")
