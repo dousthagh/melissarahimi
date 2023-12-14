@@ -1,6 +1,6 @@
 @extends("panel.layout.layout.main")
 @section("content")
-
+<div class="no-select">
     <div class="panel panel-white">
         <div class="panel-heading ">
             <div class="panel-title ">{{$details->title}}</div>
@@ -79,6 +79,7 @@
             </div>
         @endif
     </div>
+</div>
 @endsection
 
 @section('script')
@@ -86,5 +87,6 @@
         document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
+
     </script>
 @endsection
