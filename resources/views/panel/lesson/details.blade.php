@@ -38,6 +38,9 @@
                 </div>
             @endif
             @if($details->lessonContents != null)
+            @php
+                $contentIndex= 1;
+            @endphp
                 @foreach($details->lessonContents as $content)
                     <div class="white-box p-0">
                         {!! $content->content !!}
@@ -46,13 +49,22 @@
                         <div class="white-box">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    @if(in_array(strtolower($content->files[$i]->postfix), ['mp4', 'mpeg']))
-                                        <video id="video_player" controls="" controlsList="nodownload"
-                                               style="height: auto; width:100%;">
+                                    @if(in_array(strtolower($content->files[$i]->postfix), ['mp4', 'mpeg', 'mov']))
+                                        {{-- <video id="video_player" controls="" controlsList="nodownload"
+                                               style="height: auto; width:100%;" preload="metadata">
                                             <source
                                                 src="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}"
                                                 type="video/mp4"/>
-                                        </video>
+                                        </video> --}}
+                                        <div class="panel">
+                                            <a class="text-danger" href="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}">
+                                                <i class="fa fa-check"></i>
+                                                نمایش ویدئو شماره  {{$contentIndex}}
+                                            </a>
+                                        </div>
+                                        @php
+                        $contentIndex++;
+                    @endphp
                                     @elseif(in_array(strtolower($content->files[$i]->postfix), ['png', 'jpeg', 'jpg', 'tif']))
                                         <a href="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}">
                                             <img alt="{{$content->files[$i]->title}}"
