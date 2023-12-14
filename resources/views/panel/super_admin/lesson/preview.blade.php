@@ -51,7 +51,7 @@
                                         <video id="video_player" controls="" controlsList="nodownload"
                                                style="height: auto; width:100%;">
                                             <source
-                                                src="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}"
+                                                src="{{route('super_admin.lesson.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}"
                                                 type="video/mp4"/>
                                         </video>
                                     @elseif(in_array(strtolower($content->files[$i]->postfix), ['png', 'jpeg', 'jpg', 'tif']))
