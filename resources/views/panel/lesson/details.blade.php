@@ -56,6 +56,8 @@
                                                 src="{{route('lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}"
                                                 type="video/mp4"/>
                                         </video> --}}
+
+
                                             <div class="panel">
                                                 <div class="panel-body">
                                                     <a class="text-danger"
