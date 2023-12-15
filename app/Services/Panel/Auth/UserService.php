@@ -59,6 +59,7 @@ class UserService implements IUserService
         $user->email_verified_at = date("Y-m-d H:i:s");
         $user->password = Hash::make($model->getPassword());
         $user->is_active = 1;
+        $user->accept_terms = $model->getAcceptTerms();
         $user->save();
         return [
             "result" => true,

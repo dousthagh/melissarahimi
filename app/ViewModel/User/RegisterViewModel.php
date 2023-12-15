@@ -9,6 +9,7 @@ class RegisterViewModel
     private $email;
     private $password;
     private $confirmPassword;
+    private $term;
 
     /**
      * @return mixed
@@ -24,6 +25,22 @@ class RegisterViewModel
     public function setFirstName($firstName): void
     {
         $this->firstName = $firstName;
+    } 
+    
+    /**
+     * @return mixed
+     */
+    public function getAcceptTerms() : bool
+    {
+        return $this->term;
+    }
+
+    /**
+     * @param mixed $term
+     */
+    public function setAcceptTerms($term): void
+    {
+        $this->term = $term;
     }
 
     /**

@@ -37,8 +37,9 @@ Route::prefix('guest')->group(function () {
 
     Route::get('/register', [UserController::class, "register"])->name('register');
     Route::post('/register', [UserController::class, "DoRegister"])->name('do_register');
-
+    
     Route::get('/get_level_logo_image/{key}', [LevelController::class, "GetLevelLogo"])->name('get_level_logo');
+    Route::get('/terms', [UserController::class, "Term"])->name('terms');
 
 });
 

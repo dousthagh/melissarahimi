@@ -32,6 +32,11 @@ class UserController extends Controller
         return view('panel.guest.register');
     }
 
+    public function Term()
+    {
+        return view('panel.guest.terms');
+    }
+
     public function Logout()
     {
         Auth::logout();
@@ -59,6 +64,7 @@ class UserController extends Controller
             'email' => 'required|email',
             'password' => 'required',
             're_password' => 'required',
+            'accept_term' => 'required',
         ]);
         if (!$validator->getMessageBag()->isEmpty()) {
             return redirect()->back()->withErrors($validator->errors(), 'validator');
@@ -70,6 +76,7 @@ class UserController extends Controller
         $viewModel->setEmail($request->email);
         $viewModel->setPassword($request->password);
         $viewModel->setConfirmPassword($request->re_password);
+        $viewModel->setAcceptTerms($request->accept_term == 'on');
 
         $result = $this->userService->Register($viewModel);
         if(!$result['result']){
