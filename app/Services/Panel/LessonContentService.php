@@ -50,6 +50,7 @@ class LessonContentService
     {
         return LessonContent::where("lesson_id", $lessonId)
             ->where("is_active", 1)
+            ->orderBy("sort_order")
             ->get();
     }
 

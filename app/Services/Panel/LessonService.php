@@ -84,7 +84,7 @@ class LessonService
                 $table->where("passed_lessons.user_level_category_id", $userLevelCategoryId);
             }])
             ->with(['lessonContents'=>function($table){
-                $table->with('files');
+                $table->orderBy("sort_order")->with('files');
             }])
             ->first();
     }
