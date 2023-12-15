@@ -13,7 +13,7 @@
     <!-- animation CSS -->
     <link href="{{asset('panel/css/animate.css')}}" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="{{asset('panel/css/style.css')}}" rel="stylesheet">
+    <link href="{{asset('panel/css/newstyle.css')}}" rel="stylesheet">
     <!-- color CSS -->
     {{-- <link href="{{asset('panel/css/colors/blue.css')}}" id="theme"  rel="stylesheet"> --}}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
