@@ -48,12 +48,15 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     @if(in_array(strtolower($content->files[$i]->postfix), ['mp4', 'mpeg']))
-                                        <video id="video_player" controls="" controlsList="nodownload"
-                                               style="height: auto; width:100%;">
-                                            <source
-                                                src="{{route('super_admin.lesson.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}"
-                                                type="video/mp4"/>
-                                        </video>
+                                        <div class="panel">
+                                            <div class="panel-body">
+                                                <a class="text-danger"
+                                                    href="{{route('super_admin.lesson.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}">
+                                                    <i class="fa fa-play-circle"></i>
+                                                    نمایش ویدئو شماره {{ $contentIndex }}
+                                                </a>
+                                            </div>
+                                        </div>
                                     @elseif(in_array(strtolower($content->files[$i]->postfix), ['png', 'jpeg', 'jpg', 'tif']))
                                         <a href="{{route('super_admin.lesson.content.files.address', ['key'=>$content->files[$i]->secret_key, 'lesson_content_id'=>$content->id, 'private_key'=>$key])}}">
                                             <img alt="{{$content->files[$i]->title}}"

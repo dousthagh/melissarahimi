@@ -97,7 +97,7 @@ class LessonService
                 $table->orderBy("lesson_files.sort_order");
             }])
             ->with(['lessonContents'=>function($table){
-                $table->with('files');
+                $table->orderBy("sort_order")->with('files');
             }])
             ->first();
     }
