@@ -37,20 +37,25 @@ Route::prefix('guest')->group(function () {
 
     Route::get('/register', [UserController::class, "register"])->name('register');
     Route::post('/register', [UserController::class, "DoRegister"])->name('do_register');
-    
+
     Route::get('/get_level_logo_image/{key}', [LevelController::class, "GetLevelLogo"])->name('get_level_logo');
     Route::get('/terms', [UserController::class, "Term"])->name('terms');
-
 });
 
 Route::middleware(['auth'])->group(function () {
 
     Route::prefix("user")->group(function () {
         Route::get("logout", [UserController::class, "Logout"])->name("logout");
+        Route::get("user_terms", [UserController::class, "UserTerms"])->name("user.terms");
+        Route::get("accept_user_terms", [UserController::class, "AcceptUserTerms"])->name("user.terms.accept");
     });
+    
 
     Route::get('/dashboard', function () {
-        return view('panel.dashboard.index');
+        if (auth()->user()->accept_terms)
+            return view('panel.dashboard.index');
+        else
+            return redirect()->route('user.terms');
     })->name('panel.dashboard');
 
 
@@ -124,7 +129,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('user_info/{email}', [UserManagementController::class, "GetUserInfo"])->name('user_info');
 
         Route::get('get_master_of_category/{categoryId}', [UserManagementController::class, "GetMasterOfCategory"])->name('get_master_of_category');
-
     });
     Route::middleware(['auth.master'])->prefix("master")->prefix('level_category')->group(function () {
         Route::get('my_levels/{userLevelCategoryParentId}', [LevelCategoryController::class, "GetCurrentMasterLevelCategories"])->name('master.level_category.current_master_level_categories');
@@ -140,7 +144,6 @@ Route::middleware(['auth'])->group(function () {
                 Route::get("get_address/{key}/{userLevelCategoryId}/{private_key}", [LessonController::class, "GetLessonFileAddressBySecretKey"])->name("user_level_category.lesson.files.address");
                 Route::post("send_sample_work", [LessonController::class, "SendSampleWork"])->name("user_level_category.lesson.sample_work.send");
                 Route::get("sample_work/{lessonId}/{userLevelCategoryId}", [LessonController::class, "MySampleWorkList"])->name("user_level_category.lesson.sample_work");
-
             });
             Route::middleware(['auth.master'])->group(function () {
                 Route::prefix("master")->group(function () {
@@ -151,7 +154,6 @@ Route::middleware(['auth'])->group(function () {
                         Route::post("/sample_work_apply_comment", [MasterController::class, "ApplyCommentOnSampleWork"])->name("user_level_category.master.my_student.sample_work.apply_comment");
                         Route::post("/sample_work_set_user_level_without_category_id", [MasterController::class, "SetUserLevelCategoryWithoutCategoryId"])->name("user_level_category.master.my_student.sample_work.set_user_level_without_category_id");
                     });
-
                 });
             });
 
@@ -175,4 +177,3 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get("get_file_address/{key}/{lesson_content_id}/{private_key}", [LessonContentController::class, "GetLessonContentFileAddressBySecretKey"])->name("lesson.content.files.address");
 });
-

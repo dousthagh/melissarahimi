@@ -28,13 +28,9 @@
 <div class="preloader">
     <div class="cssload-speeding-wheel"></div>
 </div>
-<section id="wrapper" class="login-register" >
-    <div class="login-box login-sidebar">
-        <div class="white-box bg-dark">
-            @yield('form')
-        </div>
-    </div>
-</section>
+<div class="white-box bg-dark">
+    @yield('form')
+</div>
 <!-- jQuery -->
 <script src="{{asset('panel/lib/jquery/dist/jquery.min.js')}}"></script>
 <!-- Bootstrap Core JavaScript -->

@@ -41,6 +41,16 @@ class UserController extends Controller
     {
         Auth::logout();
         return redirect()->route('login');
+    } 
+    
+    public function UserTerms()
+    {
+        return view('panel.dashboard.terms');
+    }
+    public function AcceptUserTerms()
+    {
+        $this->userService->AcceptCurrentUserTerms();
+        return redirect()->route('panel.dashboard');
     }
 
     public function DoLogin(Request $request)

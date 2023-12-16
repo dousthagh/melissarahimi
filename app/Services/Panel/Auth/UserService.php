@@ -73,6 +73,12 @@ class UserService implements IUserService
         $user = User::where("email", $email)->where("is_active", 1)->first();
         return $user;
     }
+    public function AcceptCurrentUserTerms()
+    {
+        User::where("id", auth()->id())->update([
+            'accept_terms'=>true
+        ]);
+    }
 
     public function GetMastersOrGrandMasterOfCategory($categoryId)
     {
