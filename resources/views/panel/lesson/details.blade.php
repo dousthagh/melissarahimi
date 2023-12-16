@@ -1,11 +1,13 @@
 @extends('panel.layout.layout.main')
 @section('content')
     <div class="no-select">
+
         <div class="panel panel-white">
             <div class="panel-heading ">
                 <div class="panel-title ">{{ $details->title }}</div>
             </div>
             <div class="panel-body">
+                <div id="content-container"></div>
                 @if (count($details->files) > 0 || strlen(strip_tags(trim($details->description))) > 0)
                     <div class="white-box m-b-10">
                         <div class="container-fluid">
@@ -105,5 +107,30 @@
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
+        $(document).ready(function() {
+            var textToDisplay = "{{ $user_name }}";
+            var $textContainer = $('#content-container');
+            displayText(textToDisplay, $textContainer);
+
+            setInterval(() => {
+                if (!checkWatermark())
+                    window.location = "{{route('logout')}}";
+            }, 500);
+        })
+
+        function displayText(text, $container) {
+            var $text = $('<label class="random-text">' + text + '</label>');
+            $container.append($text);
+
+
+        }
+
+        function checkWatermark() {
+            var radnomTextContainer = $(".random-text").text();
+            if (radnomTextContainer == undefined || radnomTextContainer != "{{ $user_name }}"  || !$('.random-text').is(':visible') || $('.random-text').css('color') != 'rgb(0, 0, 0)') {
+                return false;
+            }
+            return true;
+        }
     </script>
 @endsection

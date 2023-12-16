@@ -47,6 +47,8 @@ class LessonController extends Controller
         if (!$data['details'])
             abort(403);
 
+
+        $data['user_name']= auth()->user()->name;
         return view("panel.lesson.details", $data);
     }
 
