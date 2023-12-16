@@ -13,7 +13,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\SuperAdmin\StudentController;
 use App\Mail\ReduceLevelMail;
+use App\Services\bucket\BucketService;
 use Illuminate\Support\Facades\Route;
+use League\Flysystem\GoogleCloudStorage\UniformBucketLevelAccessVisibility;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/logo', [SettingController::class, "GetLogoFile"])->name('logo');
 Route::get('/side_image', [SettingController::class, "GetSideImageFile"])->name('side_image');
+
+Route::get('bucket', function(){
+    $service = new BucketService();
+    $service->execute();
+});
 
 
 Route::prefix('guest')->group(function () {
