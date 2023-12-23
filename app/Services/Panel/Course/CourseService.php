@@ -3,30 +3,7 @@
 namespace App\Services\Panel\Course;
 
 use App\Models\Course;
-use App\Models\CourseFile;
-use App\Models\Lesson;
-use App\Models\LessonFile;
-use App\Models\LessonSampleWork;
-use App\Models\Level;
-use App\Models\LevelCategory;
-use App\Models\SecretKey;
-use App\Models\UserLevelCategory;
-use App\Services\UploaderService;
-use App\Services\Panel\Message\MessageService;
-use App\Services\SecretKeyService;
-use App\ViewModel\Lesson\LessonContent\SaveCourseFileViewModel;
-use App\ViewModel\Lesson\LessonContent\SaveCourseViewModel;
-use App\ViewModel\Lesson\LessonContent\NewSampleWorkViewModel;
-use App\ViewModel\Lesson\LessonContent\SaveLessonFileViewModel;
-use App\ViewModel\Lesson\LessonContent\SaveLessonViewModel;
-use App\ViewModel\Message\SendMessageViewModel;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use phpDocumentor\Reflection\Types\True_;
-use Ramsey\Uuid\Guid\Guid;
+use App\ViewModel\Course\SaveCourseViewModel;
 
 class CourseService
 {

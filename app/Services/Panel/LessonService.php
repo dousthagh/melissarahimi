@@ -3,16 +3,11 @@
 namespace App\Services\Panel;
 
 use App\Models\Lesson;
-use App\Models\LessonContentFiles;
 use App\Models\LessonFile;
 use App\Models\LessonSampleWork;
-use App\Models\Level;
-use App\Models\LevelCategory;
-use App\Models\SecretKey;
 use App\Models\UserLevelCategory;
-use App\Services\UploaderService;
+use App\Services\bucket\BucketService;
 use App\Services\Panel\Message\MessageService;
-use App\Services\SecretKeyService;
 use App\ViewModel\Lesson\NewSampleWorkViewModel;
 use App\ViewModel\Lesson\SaveLessonFileViewModel;
 use App\ViewModel\Lesson\SaveLessonViewModel;
@@ -22,12 +17,11 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Ramsey\Uuid\Guid\Guid;
 
 class LessonService
 {
 
-    private UploaderService $uploaderService;
+    private BucketService $bucketService;
     private MessageService $messageService;
     private UserLevelCategoryService $userLevelCategoryService;
 
@@ -35,10 +29,9 @@ class LessonService
     {
         ini_set('max_execution_time', -1);
 
-        $this->uploaderService = new UploaderService();
+        $this->bucketService = new BucketService();
         $this->messageService = new MessageService();
         $this->userLevelCategoryService = new UserLevelCategoryService();
-
     }
 
     public function GetLessonsByUserLevelCategoryId($userLevelCategoryId)
@@ -83,11 +76,11 @@ class LessonService
             ->with(["passedLessons" => function ($table) use ($userLevelCategoryId) {
                 $table->where("passed_lessons.user_level_category_id", $userLevelCategoryId);
             }])
-            ->with(['lessonContents'=>function($table){
+            ->with(['lessonContents' => function ($table) {
                 $table->orderBy("sort_order")
-                ->with(['files'=>function($tableContentFiles){
-                    $tableContentFiles->where("is_active", 1);
-                }]);
+                    ->with(['files' => function ($tableContentFiles) {
+                        $tableContentFiles->where("is_active", 1);
+                    }]);
             }])
             ->first();
     }
@@ -99,7 +92,7 @@ class LessonService
                 $table->where("lesson_files.is_active", 1);
                 $table->orderBy("lesson_files.sort_order");
             }])
-            ->with(['lessonContents'=>function($table){
+            ->with(['lessonContents' => function ($table) {
                 $table->orderBy("sort_order")->with('files');
             }])
             ->first();
@@ -112,7 +105,7 @@ class LessonService
         $lessonFiles = LessonFile::join("lessons", "lessons.id", "=", "lesson_files.lesson_id")
             ->where("secret_key", $secretKey);
 
-        if(!$isAdmin){
+        if (!$isAdmin) {
             $lessonFiles = $lessonFiles->leftJoin("passed_lessons", "passed_lessons.lesson_id", "=", DB::raw("lessons.id and passed_lessons.user_level_category_id = $userLevelCategoryId"))
                 ->join("level_categories", "lessons.level_category_id", "=", "level_categories.id")
                 ->join("user_level_categories", "level_categories.id", "=", "user_level_categories.level_category_id")
@@ -129,7 +122,7 @@ class LessonService
     public function GetLessonSamples($lessonId, $userLevelCategoryId, $myWork = true)
     {
         $userId = auth()->id();
-        if($myWork){
+        if ($myWork) {
             $startUserLevelCategory = $this->userLevelCategoryService->getFirstUserLevelCategory($userId, $userLevelCategoryId, false);
             $userLevelCategoryId = $startUserLevelCategory->id;
         }
@@ -161,7 +154,7 @@ class LessonService
         if (!$isExistsUserLevelCategoryOfCurrentUser)
             abort(403);
 
-        if( $isExistsUserLevelCategoryOfCurrentUser->expire_date < date("Y-m-d H:i:s")){
+        if ($isExistsUserLevelCategoryOfCurrentUser->expire_date < date("Y-m-d H:i:s")) {
             abort(503);
         }
         if (!$isExistsUserLevelCategoryOfCurrentUser->is_active || $isExistsUserLevelCategoryOfCurrentUser->start_user_level_category_id != null) {
@@ -198,11 +191,11 @@ class LessonService
         $lessonSampleWork->user_level_category_id = $model->getUserLevelCategoryId();
         $lessonSampleWork->description = $model->getDescription();
 
-        $destinationPath = "sample_work" . DIRECTORY_SEPARATOR . $model->getUserLevelCategoryId() . DIRECTORY_SEPARATOR . $model->getLessonId();
-        $uploadResult = $this->uploaderService->saveAndResizeImage($model->getFile(), $destinationPath);
-
-        $lessonSampleWork->file_path = $uploadResult['original'];
-        $lessonSampleWork->thumbnail_path = $uploadResult['thumbnail'];
+        $destinationPath = "sample_work" . "/" . $model->getUserLevelCategoryId() . "/" . $model->getLessonId() . "/" . $model->getFile()['name'];
+        $uploadResult = $this->bucketService->uploadPartOfFile($model->getFile()['name'], $destinationPath);
+        if (!$uploadResult)
+            abort(500);
+        $lessonSampleWork->file_path = $model->getFile()['name'];
 
         DB::beginTransaction();
         $lessonSampleWork->save();
@@ -220,7 +213,6 @@ class LessonService
         $sendMessageModel->setLink(route('user_level_category.master.my_student.sample_work.details', ['lessonId' => $model->getLessonId(), 'userLevelCategoryId' => $model->getUserLevelCategoryId()]));
         $this->messageService->sendInnerNotification($sendMessageModel);
         DB::commit();
-
     }
 
     public function GetSampleWorkImage($sampleWorkId, $isThumbnail = false)
@@ -316,7 +308,6 @@ class LessonService
         // $response->header("Access-Control-Allow-Methods", "GET, OPTIONS");
 
         return $response;
-
     }
 
 
@@ -342,24 +333,28 @@ class LessonService
     }
 
 
-    public function GetLessonOfLevelCategoryId($levelCategoryId){
+    public function GetLessonOfLevelCategoryId($levelCategoryId)
+    {
         return Lesson::where("level_category_id", $levelCategoryId)
             ->where("is_active", 1)
             ->get();
     }
 
-    public function GetLessonDetails($lessonId){
+    public function GetLessonDetails($lessonId)
+    {
         return Lesson::where("id", $lessonId)
             ->first();
     }
 
-    public function GetLessonFiles($lessonId){
+    public function GetLessonFiles($lessonId)
+    {
         return LessonFile::where("lesson_id", $lessonId)
             ->get();
     }
 
-    public function SaveLesson(SaveLessonViewModel $model){
-        if($model->getId() > 0)
+    public function SaveLesson(SaveLessonViewModel $model)
+    {
+        if ($model->getId() > 0)
             $lesson = Lesson::find($model->getId());
         else
             $lesson = new Lesson();
@@ -370,24 +365,29 @@ class LessonService
         $lesson->save();
     }
 
-    public function SaveLessonFile(SaveLessonFileViewModel $model){
+    public function SaveLessonFile(SaveLessonFileViewModel $model)
+    {
         $lessonFile = new LessonFile();
         $lessonFile->lesson_id = $model->getLessonId();
         $lessonFile->title = $model->getTitle();
-        $destinationAddress = "lesson".DIRECTORY_SEPARATOR .$model->getLessonId();
+        $destinationAddress = "lesson" . "/" . $model->getLessonId() . "/" . $model->getFile()['name'];
         $lessonFile->secret_key = Str::uuid();
-        $result = $this->uploaderService->saveFile($model->getFile(), $destinationAddress);
-        $lessonFile->file_path = $result['file_name'];
-        $lessonFile->postfix = ".".$result['postfix'];
+        $result = $this->bucketService->uploadPartOfFile($model->getFile()['name'], $destinationAddress);
+        if (!$result)
+            abort(500);
+        $lessonFile->file_path = $model->getFile()['name'];
+        $lessonFile->postfix = $model->getFile()['type'];
 
         $lessonFile->save();
     }
 
-    public function DeleteLessonFile($id){
+    public function DeleteLessonFile($id)
+    {
         $lessonFile = LessonFile::find($id);
-        $fullPath = "lesson".DIRECTORY_SEPARATOR.$lessonFile->lesson_id;
-        $this->uploaderService->unlink($fullPath, $lessonFile->file_path);
+        if (!$lessonFile)
+            abort(404);
+        $fullPath = "lesson" . "/" . $lessonFile->lesson_id;
+        $this->bucketService->Delete($fullPath . "/" . $lessonFile->file_path);
         $lessonFile->delete();
     }
-
 }

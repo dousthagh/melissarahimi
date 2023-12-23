@@ -14,7 +14,7 @@ use App\Models\Level;
 use App\Models\LevelCategory;
 use App\Models\SecretKey;
 use App\Models\UserLevelCategory;
-use App\Services\UploaderService;
+use App\Services\bucket\BucketService;
 use App\Services\Panel\Message\MessageService;
 use App\Services\SecretKeyService;
 use App\ViewModel\Course\SaveCourseViewModel;
@@ -34,7 +34,7 @@ use function PHPUnit\Framework\exactly;
 
 class LessonContentService
 {
-    private UploaderService $uploaderService;
+    private BucketService $bucketService;
     private SecretKeyService $secretKeyService;
 
 
@@ -42,7 +42,7 @@ class LessonContentService
     {
         ini_set('max_execution_time', -1);
 
-        $this->uploaderService = new UploaderService();
+        $this->bucketService = new BucketService();
         $this->secretKeyService = $secretKeyService;
     }
 
@@ -114,7 +114,6 @@ class LessonContentService
 
 
         return $response;
-
     }
 
 
@@ -136,27 +135,25 @@ class LessonContentService
             }
         }
 
-
         try {
             DB::beginTransaction();
             $content->save();
             if ($model->getFiles()) {
-                for ($i = 0; $i < count($model->getFiles()); $i++) {
-                    $file = $model->getFiles()[$i];
-                    $destinationAddress = "content" . DIRECTORY_SEPARATOR . $content->id;
-                    $result = $this->uploaderService->saveFile($file, $destinationAddress);
-
+                for ($i = 0; $i < count($model->getFiles()['name']); $i++) {
+                    $destinationAddress = "content" . "/" . $content->id . "/" . $model->getFiles()['name'][$i];
+                    $result = $this->bucketService->uploadPartOfFile(null, $destinationAddress, $model->getFiles()['tmp_name'][$i]);
+                    if (!$result)
+                        abort(500);
                     $contentFile = new LessonContentFiles();
                     $contentFile->lesson_content_id = $content->id;
-                    $contentFile->file_path = $result['file_name'];
-                    $contentFile->postfix = $result['postfix'];
+                    $contentFile->file_path = $model->getFiles()['name'][$i];
+                    $contentFile->postfix = $model->getFiles()['type'][$i];
                     $contentFile->secret_key = Str::uuid();
 
                     $contentFile->save();
                 }
             }
             DB::commit();
-
         } catch (\Exception $ex) {
             dd($ex->getMessage());
         }
@@ -176,10 +173,10 @@ class LessonContentService
     private function deleteFile($id)
     {
         $lessonContentFile = LessonContentFiles::find($id);
-        $fullPath = "content" . DIRECTORY_SEPARATOR . $lessonContentFile->lesson_content_id;
-        $this->uploaderService->unlink($fullPath, $lessonContentFile->file_path);
+        if (!$lessonContentFile)
+            abort(404);
+        $fullPath = "content" . "/" . $lessonContentFile->lesson_content_id . "/" . $lessonContentFile->file_path;
+        $this->bucketService->Delete($fullPath);
         $lessonContentFile->delete();
     }
-
-
 }

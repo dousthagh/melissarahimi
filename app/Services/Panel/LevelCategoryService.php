@@ -5,7 +5,7 @@ namespace App\Services\Panel;
 use App\Models\Lesson;
 use App\Models\LevelCategory;
 use App\Models\UserLevelCategory;
-use App\Services\UploaderService;
+use App\Services\bucket\BucketService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
@@ -13,14 +13,11 @@ use Illuminate\Support\Facades\Storage;
 
 class LevelCategoryService
 {
-    private UploaderService $imageService;
+    private BucketService $bucketService;
 
-    /**
-     * @param UploaderService $imageService
-     */
-    public function __construct(UploaderService $imageService)
+    public function __construct(BucketService $imageService)
     {
-        $this->imageService = $imageService;
+        $this->bucketService = $imageService;
     }
 
     public function GetAllLevelCategories()
@@ -38,30 +35,30 @@ class LevelCategoryService
     }
     public function GetCurrentMasterLevelCategoris($parentUserLevelCategoryId)
     {
-        $category = UserLevelCategory::where("user_level_categories.id","=", $parentUserLevelCategoryId)
-        ->where("user_level_categories.user_id", "=", Auth::user()->id)
-        ->join("level_categories","user_level_categories.level_category_id","=","level_categories.id")
-        ->select(["level_categories.category_id"])
-        ->first();
-        if(empty($category))
-        {
-            abort(404,"Parent id is not valid for current user");
+        $category = UserLevelCategory::where("user_level_categories.id", "=", $parentUserLevelCategoryId)
+            ->where("user_level_categories.user_id", "=", Auth::user()->id)
+            ->join("level_categories", "user_level_categories.level_category_id", "=", "level_categories.id")
+            ->select(["level_categories.category_id"])
+            ->first();
+        if (empty($category)) {
+            abort(404, "Parent id is not valid for current user");
         }
-        $categoryId = $category['category_id'];    
-        $levels = LevelCategory::where('category_id','=',$categoryId)
-        ->join('levels','level_categories.level_id','=','levels.id')
-        ->select([
-            'levels.title as level_title',
-            'level_categories.id as level_category_id'
-        ])->get();
+        $categoryId = $category['category_id'];
+        $levels = LevelCategory::where('category_id', '=', $categoryId)
+            ->join('levels', 'level_categories.level_id', '=', 'levels.id')
+            ->select([
+                'levels.title as level_title',
+                'level_categories.id as level_category_id'
+            ])->get();
         return $levels;
     }
 
     public function GetLevelCategoryLogoFile($levelCategoryId, $thumbnail = true)
     {
         $levelCategory = LevelCategory::find($levelCategoryId);
-        $path = Storage::path("level_category" . DIRECTORY_SEPARATOR .
-            ($thumbnail ? "thumb-" : "") . $levelCategory->logo_file_address
+        $path = Storage::path(
+            "level_category" . DIRECTORY_SEPARATOR .
+                ($thumbnail ? "thumb-" : "") . $levelCategory->logo_file_address
         );
         if (!File::exists($path)) {
             abort(404);
@@ -79,12 +76,15 @@ class LevelCategoryService
         return $response;
     }
 
-    public function SaveLogo($levelCategoryId, $file){
-        $destinationPath = "level_category";
-
-        $result = $this->imageService->saveAndResizeImage($file, $destinationPath);
+    public function SaveLogo($levelCategoryId, $file)
+    {
         $levelCategory = LevelCategory::find($levelCategoryId);
-        $levelCategory->logo_file_address = $result['original'];
+        if (!$levelCategory)
+            abort(404);
+        $destinationPath = "level_category/" . $file['name'];
+
+        $result = $this->bucketService->uploadPartOfFile($file, $destinationPath);
+        $levelCategory->logo_file_address = $file['type'];
         $levelCategory->save();
     }
 }

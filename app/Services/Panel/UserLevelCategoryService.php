@@ -8,9 +8,9 @@ use App\Models\LevelCategory;
 use App\Models\PassedLesson;
 use App\Models\User;
 use App\Models\UserLevelCategory;
+use App\Services\bucket\BucketService;
 use App\Services\Panel\Auth\IdentityService;
 use App\Services\Panel\Message\MessageService;
-use App\Services\UploaderService;
 use App\ViewModel\Message\SendMessageViewModel;
 use App\ViewModel\Message\SendChangeLevelMessageViewModel;
 use App\ViewModel\UserLevelCategory\GetUserLevelCategoryStudentFilterViewModel;
@@ -22,14 +22,13 @@ class UserLevelCategoryService
 {
     private IdentityService $identityService;
     private MessageService $messageService;
-    private UploaderService $uploaderService;
+    private BucketService $bucketService;
 
     public function __construct()
     {
         $this->identityService = new IdentityService();
         $this->messageService = new MessageService();
-        $this->uploaderService = new UploaderService();
-
+        $this->bucketService = new BucketService();
     }
 
     public function SetUserLevelCategoryWithCategoryId(SetUserLevelCategoryWithCategoryIdViewModel $model, $levelCategoryId = 0, $roleName = "Student")
@@ -53,7 +52,7 @@ class UserLevelCategoryService
         $userLevelCategory->start_user_level_category_id = $model->getStartUserLevelCategoryId();
         $parentUser = UserLevelCategory::where("id", $model->getParentId())->first();
         $user = User::where("id", $model->getUserId())->first();
-        $generatedCode =substr($roleName, 0,1) . $user->id.substr($user->first_name,0,1).substr($user->last_name,0,1). $parentUser->id.substr($parentUser->first_name,0,1).substr($parentUser->last_name,0,1);
+        $generatedCode = substr($roleName, 0, 1) . $user->id . substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1) . $parentUser->id . substr($parentUser->first_name, 0, 1) . substr($parentUser->last_name, 0, 1);
         $userLevelCategory->code = $generatedCode;
 
         DB::beginTransaction();
@@ -66,11 +65,10 @@ class UserLevelCategoryService
         $this->identityService->addRoleToUser($model->getUserId(), $roleName);
         DB::commit();
 
-        if($userLevelCategory->save())
+        if ($userLevelCategory->save())
             return $userLevelCategory;
 
         return null;
-
     }
 
     public function SetUserLevelCategoryWithoutCategoryId(SetUserLevelCategoryWithoutCategoryIdViewModel $model)
@@ -80,7 +78,7 @@ class UserLevelCategoryService
                 ->where("parent_id", $model->getParentUserLevelCategoryId())
                 ->where("is_active", 1)
                 ->first();
-            if(!$currentUserLevelCategory){
+            if (!$currentUserLevelCategory) {
                 abort(500);
             }
             $parentUserLevelCategory = UserLevelCategory::where("user_level_categories.id", $model->getParentUserLevelCategoryId())
@@ -129,16 +127,14 @@ class UserLevelCategoryService
         }
 
         if ($result) {
-            if($levelCategory->level_order < $currentUserLevelCategory->levelCategory->level->sort_order){
+            if ($levelCategory->level_order < $currentUserLevelCategory->levelCategory->level->sort_order) {
                 $this->sendReduceLevelEmail($model->getUserId(), $levelCategory->level_key, $levelCategory->level_title, $result->code);
-            }
-            else{
+            } else {
 
                 $this->sendNewLevelPromotedEmail($model->getUserId(), $levelCategory->level_key, $levelCategory->level_title, $result->code);
             }
         }
         return $result;
-
     }
 
     public function GetMyStudentsWithUserLevelCategoryParent($userLevelCategoryId, $pageNumber = 1, GetUserLevelCategoryStudentFilterViewModel $categoryStudentFilterViewModel = null)
@@ -154,7 +150,8 @@ class UserLevelCategoryService
             ->where("users.is_active", 1)
             ->groupBy("user_level_category_child.user_id")
             ->orderBy("levels.sort_order")
-            ->select("users.id",
+            ->select(
+                "users.id",
                 "users.name",
                 "users.email",
                 "levels.sort_order as level_order",
@@ -171,7 +168,6 @@ class UserLevelCategoryService
                 $result = $result->where("users.name", "like", "%" . $categoryStudentFilterViewModel->getName() . "%");
             if ($categoryStudentFilterViewModel->getLevelId())
                 $result = $result->where("levels.key", $categoryStudentFilterViewModel->getLevelId());
-
         }
         $result = $result->paginate(10, ['*'], 'page', $pageNumber)
             ->withQueryString();
@@ -236,7 +232,7 @@ class UserLevelCategoryService
         Db::commit();
     }
 
-    public function RejectSampleWork($sampleWorkId, $description, $file=null)
+    public function RejectSampleWork($sampleWorkId, $description, $file = null)
     {
         $sampleWork = LessonSampleWork::join("user_level_categories", "user_level_categories.id", "=", "lesson_sample_works.user_level_category_id")
             ->join("user_level_categories as user_level_category_parent", "user_level_category_parent.id", "=", "user_level_categories.parent_id")
@@ -253,22 +249,21 @@ class UserLevelCategoryService
             abort(403);
         }
         DB::beginTransaction();
-        $masterFilePath =null;
-        $masterThumbnailFilePath =null;
-        if($file != null){
+        $masterFilePath = null;
+        if ($file != null) {
             $currentSampleWork = LessonSampleWork::find($sampleWorkId, ['user_level_category_id', 'lesson_id']);
-            $destinationPath = "sample_work" . DIRECTORY_SEPARATOR . $currentSampleWork->user_level_category_id . DIRECTORY_SEPARATOR . $currentSampleWork->lesson_id;
-            $uploadResult = $this->uploaderService->saveAndResizeImage($file, $destinationPath);
-            $masterFilePath = $uploadResult['original'];
-            $masterThumbnailFilePath = $uploadResult['thumbnail'];
+            $destinationPath = "sample_work/" . "/" . $currentSampleWork->user_level_category_id . "/" . $currentSampleWork->lesson_id . "/" . $file['name'];
+            $uploadResult = $this->bucketService->uploadPartOfFile($file, $destinationPath);
+            if (!$uploadResult)
+                abort(500);
+            $masterFilePath = $file['name'];
         }
 
         LessonSampleWork::where("id", $sampleWorkId)->update([
             "status" => "rejected",
-             "master_description" => $description,
-             "master_file_path"=>$masterFilePath,
-             "master_thumbnail_path"=>$masterThumbnailFilePath,
-            ]);
+            "master_description" => $description,
+            "master_file_path" => $masterFilePath,
+        ]);
 
         $sendMessageModel = new SendMessageViewModel();
         $sendMessageModel->setSenderUserId(auth()->id());
@@ -314,10 +309,10 @@ class UserLevelCategoryService
     public function getFirstUserLevelCategory($userId, $userLevelCategoryId, $checkIsActive = true)
     {
         $userLevelCategory = UserLevelCategory::where("user_level_categories.id", $userLevelCategoryId)
-            ->with(['levelCategory'=> function($tblLevelCategory){
+            ->with(['levelCategory' => function ($tblLevelCategory) {
                 $tblLevelCategory->with('category');
             }])
-            ->with(['parent'=> function($tbl){
+            ->with(['parent' => function ($tbl) {
                 $tbl->with("parentUser");
             }])
             ->where("user_level_categories.user_id", $userId);
@@ -348,7 +343,8 @@ class UserLevelCategoryService
         return $result;
     }
 
-    public function countOfStudentOfUserLevelCategory($userLevelCategoryId){
+    public function countOfStudentOfUserLevelCategory($userLevelCategoryId)
+    {
         $count = UserLevelCategory::where("parent_id", $userLevelCategoryId)
             ->where("is_active", 1)
             ->groupBy("user_id")

@@ -4,7 +4,7 @@ namespace App\Services\Panel;
 
 use App\Models\MasterFiles;
 use App\Models\UserLevelCategory;
-use App\Services\UploaderService;
+use App\Services\bucket\BucketService;
 use App\ViewModel\Master\AddMasterFilesViewMode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -15,14 +15,11 @@ use function Sodium\add;
 
 class MasterService
 {
-    private UploaderService $uploaderService;
+    private BucketService $bucketService;
 
-    /**
-     * @param UploaderService $uploaderService
-     */
     public function __construct()
     {
-        $this->uploaderService = new UploaderService();
+        $this->bucketService = new BucketService();
     }
 
 
@@ -80,15 +77,16 @@ class MasterService
                 "categories.title as category_title",
                 "lines.title as line_title"
             ])->get();
-
     }
 
     public function DeleteMasterFile($id)
     {
         $masterFile = MasterFiles::find($id);
+        if (!$masterFile)
+            abort(404);
         $userLevelCategoryId = $masterFile->user_level_category_id;
-        $path = "master_files".DIRECTORY_SEPARATOR.$userLevelCategoryId;
-        $this->uploaderService->unlink($path, $masterFile->file_path);
+        $path = "master_files" . "/" . $userLevelCategoryId . "/" . $masterFile->file_path;
+        $this->bucketService->Delete($path);
         $masterFile->delete();
         return $userLevelCategoryId;
     }
@@ -96,29 +94,17 @@ class MasterService
     public function SaveMasterFiles(AddMasterFilesViewMode $addMasterFilesViewMode)
     {
         $userLevelCategory = UserLevelCategory::find($addMasterFilesViewMode->getUserLevelCategoryId());
-        $savePath = "master_files" . DIRECTORY_SEPARATOR . $addMasterFilesViewMode->getUserLevelCategoryId();
-        $result = $this->uploaderService->saveFile($addMasterFilesViewMode->getFile(), $savePath);
-        $fileName = $result['file_name'];
-        $postfix = $result['postfix'];
-        $fileType = $this->GetFileType($postfix);
-        if($fileType == "")
-            return;
+        $savePath = "master_files/" . $addMasterFilesViewMode->getUserLevelCategoryId()."/".$addMasterFilesViewMode->getFile()['name'];
+        $result = $this->bucketService->uploadPartOfFile($addMasterFilesViewMode->getFile(), $savePath);
+        if(!$result)
+        abort(500);
+        $fileName = $addMasterFilesViewMode->getFile()['name'];
+        $postfix = $addMasterFilesViewMode->getFile()['type'];
         $masterFile = new MasterFiles();
         $masterFile->user_level_category_id = $addMasterFilesViewMode->getUserLevelCategoryId();
         $masterFile->user_id = $userLevelCategory->user_id;
         $masterFile->file_path = $fileName;
-        $masterFile->file_type = $fileType;
+        $masterFile->file_type = $postfix;
         $masterFile->save();
-
-    }
-
-    private function GetFileType($postFix)
-    {
-        return match (strtolower($postFix)) {
-            "mpeg", "mp4" => "video",
-            "jpeg", "jpg", "png" => "image",
-            "pdf" => "pdf",
-            default => "",
-        };
     }
 }

@@ -99,7 +99,7 @@ class LessonController extends Controller
         $viewModel->setDescription($request->description);
         $viewModel->setLessonId($request->lesson_id);
         $viewModel->setUserLevelCategoryId($request->user_level_category_id);
-        $viewModel->setFile($request->file);
+        $viewModel->setFile($_FILES['file']);
 
         $this->lessonService->SendSampleWork($viewModel);
         return redirect()->back();
