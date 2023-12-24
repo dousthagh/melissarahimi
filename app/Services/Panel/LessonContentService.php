@@ -93,27 +93,8 @@ class LessonContentService
             abort(403);
         }
 
-        $path = Storage::path("content" . DIRECTORY_SEPARATOR . $lessonContentId . DIRECTORY_SEPARATOR . $lessonContentFile->file_path);
-
-        if (!File::exists($path)) {
-            abort(404);
-        }
-
-        $file = File::get($path);
-        $type = File::mimeType($path);
-        $size = File::size($path);
-
-        $response = Response::make($file, 200);
-        $response->header("Content-Type", $type);
-        $response->header("Content-Disposition", "inline; filename=\"$type\"");
-        $response->header("Content-Length", $size);
-
-        // Allow cross-origin requests if needed
-        // $response->header("Access-Control-Allow-Origin", "*");
-        // $response->header("Access-Control-Allow-Methods", "GET, OPTIONS");
-
-
-        return $response;
+        $path = "content" ."/" . $lessonContentId . "/" . $lessonContentFile->file_path;
+        return $this->bucketService->getFile($path);
     }
 
 

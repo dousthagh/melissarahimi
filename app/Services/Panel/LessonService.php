@@ -372,7 +372,7 @@ class LessonService
         $lessonFile->title = $model->getTitle();
         $destinationAddress = "lesson" . "/" . $model->getLessonId() . "/" . $model->getFile()['name'];
         $lessonFile->secret_key = Str::uuid();
-        $result = $this->bucketService->uploadPartOfFile($model->getFile()['name'], $destinationAddress);
+        $result = $this->bucketService->uploadPartOfFile($model->getFile(), $destinationAddress);
         if (!$result)
             abort(500);
         $lessonFile->file_path = $model->getFile()['name'];

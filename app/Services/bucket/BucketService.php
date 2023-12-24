@@ -4,9 +4,8 @@ namespace App\Services\bucket;
 
 use Aws\Exception\AwsException;
 use Aws\S3\S3Client;
-use Aws\S3\MultipartUploader;
-use Aws\S3;
-use Aws\Exception\MultipartUploadException;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 
 class BucketService
 {
@@ -36,25 +35,27 @@ class BucketService
         }
     }
 
-    function getFile($key, $bucketname)
+    function getFile($key)
     {
         $result = $this->getClient()->getObject([
-            'Bucket' => $bucketname,
+            'Bucket' => $this->getBucketName(),
             'Key' => $key
         ]);
-
+        $type = "image/png";
+        // $headers = [
+        //     'Content-Type' => "image/*", // Set the appropriate image type
+        //     'Content-Disposition' => 'inline; filename="' . $key . '"', // Display in the browser
+        // ];
+        //  return Response::make($result['Body']->getContents(), 200, $headers);
 
         $file = $result['Body'];
-        $type = $result['ContentType'];
         $size = $result['ContentLength'];
-
         $response = response($file, 200);
         $response->header("Content-Type", $type);
-        $response->header("Content-Disposition", "inline; filename=\"$type\"");
+        $response->header("Content-Disposition", "inline; filename=image/jpeg");
         $response->header("Content-Length", $size);
         return $response;
 
-        //   file_put_contents('../file-downloaded-by-php-sdk.png', $object['Body']->getContents());
     }
 
 
@@ -68,6 +69,7 @@ class BucketService
         else
             $source = $file['tmp_name'];
         $client = $this->getClient();
+        $mimType = mime_content_type($source);
         try {
             $uploader = $client->createMultipartUpload([
                 'Bucket' => $this->getBucketName(),
@@ -87,8 +89,8 @@ class BucketService
                     'UploadId' => $uploadId,
                     'PartNumber' => $partNumber,
                     'Body' => $part,
+                    'ContentType' => mime_content_type($source)
                 ]);
-                // Store the returned ETag and PartNumber for later use in completing the multipart upload
                 $parts[] = [
                     'ETag' => $uploadPartResult['ETag'],
                     'PartNumber' => $partNumber,
@@ -104,7 +106,6 @@ class BucketService
                 'UploadId' => $uploadId,
                 'MultipartUpload' => ['Parts' => $parts],
             ]);
-
             return true;
         } catch (AwsException $e) {
             return false;
