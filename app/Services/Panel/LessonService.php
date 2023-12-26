@@ -66,7 +66,7 @@ class LessonService
         return $result;
     }
 
-    public function     GetLessonDetailsForCurrentUserLevelCategoryId($lessonId, $userLevelCategoryId)
+    public function GetLessonDetailsForCurrentUserLevelCategoryId($lessonId, $userLevelCategoryId)
     {
         return Lesson::where("id", $lessonId)
             ->with(["files" => function ($table) {
