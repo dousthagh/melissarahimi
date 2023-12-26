@@ -63,7 +63,7 @@
                                             <div class="panel">
                                                 <div class="panel-body">
                                                     <a class="text-danger"
-                                                        href="{{ route('user_level_category.lesson.video.show', ['video_id' => $content->files[$i]->arvan_video_id]) }}">
+                                                        href="{{ $content->files[$i]->arvan_video_id != null ? route('user_level_category.lesson.video.show', ['video_id' => $content->files[$i]->arvan_video_id]) : "#"}}">
                                                         <i class="fa fa-play-circle"></i>
                                                         نمایش ویدئو شماره {{ $contentIndex }}
                                                     </a>
