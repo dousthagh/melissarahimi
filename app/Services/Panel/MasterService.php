@@ -43,21 +43,8 @@ class MasterService
         if (!$file)
             abort(403);
 
-        $path = Storage::path("master_files" . DIRECTORY_SEPARATOR . $file->user_level_category_id . DIRECTORY_SEPARATOR . $file->file_path);
-        if (!File::exists($path)) {
-            abort(404);
-        }
-
-        $file = File::get($path);
-
-        $type = File::mimeType($path);
-
-        $response = Response::make($file);
-
-        $response->header("Content-Type", $type);
-
-
-        return $response;
+        $path = "master_files/" . $file->user_level_category_id . "/" . $file->file_path;
+        return $this->bucketService->getFile($path);
     }
 
     public function GetMasterList()

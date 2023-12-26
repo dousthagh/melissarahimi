@@ -78,7 +78,7 @@ class LessonController extends Controller
         $viewModel = new SaveLessonFileViewModel();
         $viewModel->setLessonId($request->lesson_id);
         $viewModel->setTitle($request->title);
-        $viewModel->setFile($request->file);
+        $viewModel->setFile($_FILES['file']);
         $this->lessonService->SaveLessonFile($viewModel);
         return redirect()->back()->with('state', 1);
     }

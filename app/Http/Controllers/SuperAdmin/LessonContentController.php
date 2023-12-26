@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Services\bucket\BucketService;
 use App\Services\Panel\LessonContentService;
 use App\Services\SecretKeyService;
 use App\Services\Video\VideoService;

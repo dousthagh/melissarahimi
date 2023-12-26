@@ -76,7 +76,7 @@ class MasterController extends Controller
         if (!$validator->getMessageBag()->isEmpty()) {
             return redirect()->back()->withErrors($validator->errors(), 'validator');
         }
-        $this->userLevelCategoryService->AcceptOrRejectSampleWork($request->sample_work_id, $request->status, $request->master_description, $request->file);
+        $this->userLevelCategoryService->AcceptOrRejectSampleWork($request->sample_work_id, $request->status, $request->master_description, $_FILES['file']);
         return redirect()->back();
     }
 
