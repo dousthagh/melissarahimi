@@ -7,10 +7,13 @@ use App\Models\SecretKey;
 use App\Services\Panel\LessonService;
 use App\Services\Panel\UserLevelCategoryService;
 use App\Services\SecretKeyService;
+use App\Services\Video\VideoService;
 use App\ViewModel\Lesson\NewSampleWorkViewModel;
+use Doctrine\Deprecations\VerifyDeprecationsTest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class LessonController extends Controller
@@ -18,12 +21,14 @@ class LessonController extends Controller
     private LessonService $lessonService;
     private SecretKeyService $secretKeyService;
     private UserLevelCategoryService $userLevelCategoryService;
+    private VideoService $videoService;
 
     public function __construct()
     {
         $this->lessonService = new LessonService();
         $this->userLevelCategoryService = new UserLevelCategoryService();
         $this->secretKeyService = new SecretKeyService();
+        $this->videoService = new VideoService();
     }
 
     public function GetLessonList($user_level_category_id)
@@ -57,6 +62,10 @@ class LessonController extends Controller
     public function GetLessonFileAddressBySecretKey($key, $userLevelCategoryId, $privateKey)
     {
         return $this->lessonService->GetLessonFile($key, $userLevelCategoryId, $privateKey, false);
+    }
+
+    public function ShowVideo($videoId){
+        return Redirect::to($this->videoService->generateVideoAddress($videoId));
     }
 
 

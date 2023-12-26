@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Services\Panel\LessonContentService;
 use App\Services\SecretKeyService;
+use App\Services\Video\VideoService;
 use App\ViewModel\Lesson\LessonContent\SaveContentViewModel;
 use Illuminate\Http\Request;
 use function Webmozart\Assert\Tests\StaticAnalysis\length;
@@ -25,6 +26,7 @@ class LessonContentController extends Controller
         $data['contents'] = $contents;
         return view('panel.super_admin.lesson.lesson_content.index', $data);
     }
+
 
 
     public function SaveContent(Request $request){
