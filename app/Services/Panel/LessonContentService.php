@@ -63,10 +63,10 @@ class LessonContentService
     public function GetLessonContentFileAddressBySecretKey($secretKey, $lessonContentId, $privateKey, $isAdmin)
     {
         ini_set('memory_limit', '-1');
-        $isValidPrivateKey = $this->secretKeyService->isCorrectKey($privateKey);
-        if (!$isValidPrivateKey) {
-            abort(403);
-        }
+        // $isValidPrivateKey = $this->secretKeyService->isCorrectKey($privateKey);
+        // if (!$isValidPrivateKey) {
+        //     abort(403);
+        // }
         $lessonContentFile = LessonContentFiles::where("secret_key", $secretKey)
             ->where("lesson_content_id", $lessonContentId)
             ->join("lesson_contents", "lesson_contents.id", "=", "lesson_content_files.lesson_content_id")

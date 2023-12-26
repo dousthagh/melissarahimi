@@ -41,7 +41,7 @@ class BucketService
             'Bucket' => $this->getBucketName(),
             'Key' => $key
         ]);
-        $type = "image/png";
+        $type = $this->getMimeType($key);
         // $headers = [
         //     'Content-Type' => "image/*", // Set the appropriate image type
         //     'Content-Disposition' => 'inline; filename="' . $key . '"', // Display in the browser
@@ -52,19 +52,34 @@ class BucketService
         $size = $result['ContentLength'];
         $response = response($file, 200);
         $response->header("Content-Type", $type);
-        $response->header("Content-Disposition", "inline; filename=image/jpeg");
+        $response->header("Content-Disposition", "inline; filename=$type");
         $response->header("Content-Length", $size);
         return $response;
+    }
 
+    private function getMimeType($key)
+    {
+        $array = explode('.', $key);
+        $type = $array[count($array) - 1];
+        
+        switch (strtolower($type)) {
+            case "png":
+            case "jpg":
+            case "jpeg":
+                return "image/png";
+            case "mp4":
+                return "video/mp4";
+            default:
+                return "video/mov";
+        }
     }
 
 
 
-
-    function uploadPartOfFile($file, $key, $tmp_name=null)
+    function uploadPartOfFile($file, $key, $tmp_name = null)
     {
         ini_set('max_execution_time', -1);
-        if($tmp_name  != null)
+        if ($tmp_name  != null)
             $source = $tmp_name;
         else
             $source = $file['tmp_name'];

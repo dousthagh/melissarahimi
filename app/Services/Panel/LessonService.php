@@ -192,7 +192,7 @@ class LessonService
         $lessonSampleWork->description = $model->getDescription();
 
         $destinationPath = "sample_work" . "/" . $model->getUserLevelCategoryId() . "/" . $model->getLessonId() . "/" . $model->getFile()['name'];
-        $uploadResult = $this->bucketService->uploadPartOfFile($model->getFile()['name'], $destinationPath);
+        $uploadResult = $this->bucketService->uploadPartOfFile($model->getFile(), $destinationPath);
         if (!$uploadResult)
             abort(500);
         $lessonSampleWork->file_path = $model->getFile()['name'];
@@ -225,26 +225,8 @@ class LessonService
         if (!$lessonSampleWork)
             abort(403);
 
-        if ($isThumbnail)
-            $filePath = $lessonSampleWork->thumbnail_path;
-        else
-            $filePath = $lessonSampleWork->file_path;
-
-        $path = Storage::path("sample_work" . DIRECTORY_SEPARATOR . $lessonSampleWork->user_level_category_id . DIRECTORY_SEPARATOR . $lessonSampleWork->lesson_id . DIRECTORY_SEPARATOR . $filePath);
-        if (!File::exists($path)) {
-            abort(404);
-        }
-
-        $file = File::get($path);
-
-        $type = File::mimeType($path);
-
-        $response = Response::make($file, 200);
-
-        $response->header("Content-Type", $type);
-
-
-        return $response;
+        $path = "sample_work" . "/" . $lessonSampleWork->user_level_category_id . "/" . $lessonSampleWork->lesson_id . "/" . $lessonSampleWork->file_path;
+        return $this->bucketService->getFile($path);
     }
     public function GetMasterSampleWorkImage($sampleWorkId, $isThumbnail = false)
     {
@@ -256,26 +238,9 @@ class LessonService
         if (!$lessonSampleWork)
             abort(403);
 
-        if ($isThumbnail)
-            $filePath = $lessonSampleWork->master_thumbnail_path;
-        else
-            $filePath = $lessonSampleWork->master_file_path;
+        $path = "sample_work" . "/" . $lessonSampleWork->user_level_category_id . "/" . $lessonSampleWork->lesson_id . "/" . $lessonSampleWork->master_file_path;
 
-        $path = Storage::path("sample_work" . DIRECTORY_SEPARATOR . $lessonSampleWork->user_level_category_id . DIRECTORY_SEPARATOR . $lessonSampleWork->lesson_id . DIRECTORY_SEPARATOR . $filePath);
-        if (!File::exists($path)) {
-            abort(404);
-        }
-
-        $file = File::get($path);
-
-        $type = File::mimeType($path);
-
-        $response = Response::make($file, 200);
-
-        $response->header("Content-Type", $type);
-
-
-        return $response;
+        return $this->bucketService->getFile($path);
     }
 
 
@@ -288,26 +253,9 @@ class LessonService
             abort(403);
         }
 
-        $path = Storage::path("lesson" . DIRECTORY_SEPARATOR . $lessonFile->lesson_id . DIRECTORY_SEPARATOR . $lessonFile->file_path);
+        $path = "lesson/" . $lessonFile->lesson_id . "/" . $lessonFile->file_path;
 
-        if (!File::exists($path)) {
-            abort(404);
-        }
-
-        $file = File::get($path);
-        $type = File::mimeType($path);
-        $size = File::size($path);
-
-        $response = Response::make($file, 200);
-        $response->header("Content-Type", $type);
-        $response->header("Content-Disposition", "inline; filename=\"$type\"");
-        $response->header("Content-Length", $size);
-
-        // Allow cross-origin requests if needed
-        // $response->header("Access-Control-Allow-Origin", "*");
-        // $response->header("Access-Control-Allow-Methods", "GET, OPTIONS");
-
-        return $response;
+        return $this->bucketService->getFile($path);
     }
 
 

@@ -56,24 +56,9 @@ class LevelCategoryService
     public function GetLevelCategoryLogoFile($levelCategoryId, $thumbnail = true)
     {
         $levelCategory = LevelCategory::find($levelCategoryId);
-        $path = Storage::path(
-            "level_category" . DIRECTORY_SEPARATOR .
-                ($thumbnail ? "thumb-" : "") . $levelCategory->logo_file_address
-        );
-        if (!File::exists($path)) {
-            abort(404);
-        }
-
-        $file = File::get($path);
-
-        $type = File::mimeType($path);
-
-        $response = Response::make($file, 200);
-
-        $response->header("Content-Type", $type);
-
-
-        return $response;
+        $path =  "level_category" ."/" . $levelCategory->logo_file_address;
+        
+        return $this->bucketService->getFile($path);
     }
 
     public function SaveLogo($levelCategoryId, $file)

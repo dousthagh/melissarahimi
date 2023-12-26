@@ -252,7 +252,7 @@ class UserLevelCategoryService
         $masterFilePath = null;
         if ($file != null) {
             $currentSampleWork = LessonSampleWork::find($sampleWorkId, ['user_level_category_id', 'lesson_id']);
-            $destinationPath = "sample_work/" . "/" . $currentSampleWork->user_level_category_id . "/" . $currentSampleWork->lesson_id . "/" . $file['name'];
+            $destinationPath = "sample_work" . "/" . $currentSampleWork->user_level_category_id . "/" . $currentSampleWork->lesson_id . "/" . $file['name'];
             $uploadResult = $this->bucketService->uploadPartOfFile($file, $destinationPath);
             if (!$uploadResult)
                 abort(500);

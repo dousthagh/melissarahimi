@@ -65,10 +65,7 @@ class LessonContentController extends Controller
 
     public function GetLessonContentFileAddressBySecretKey($key, $lessonContentId, $privateKey)
     {
-        $s = new BucketService();
-        return $s->getFile("lesson/4/e5a23b8c-06c4-4a6c-bdaf-21e36d895d74.jpg");
-
-        // return $this->contentService->GetLessonContentFile($key, $lessonContentId, $privateKey);
+        return $this->contentService->GetLessonContentFile($key, $lessonContentId, $privateKey);
     }
     public function GetLessonContentFileAddressBySecretKeyByAdmin($key, $lessonContentId, $privateKey)
     {
