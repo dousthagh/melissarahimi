@@ -62,9 +62,18 @@
 
                                             <div class="panel">
                                                 <div class="panel-body">
+
                                                     <a class="text-danger"
-                                                        href="{{ $content->files[$i]->arvan_video_id != null ? route('user_level_category.lesson.video.show', ['video_id' => $content->files[$i]->arvan_video_id]) : "#"}}">
-                                                        <i class="fa fa-play-circle"></i>
+                                                        href="{{ $content->files[$i]->arvan_video_id != null
+                                                            ? route('user_level_category.lesson.video.show', ['video_id' => $content->files[$i]->arvan_video_id])
+                                                            : route('lesson.content.files.address', [
+                                                                'key' => $content->files[$i]->secret_key,
+                                                                'lesson_content_id' => $content->id,
+                                                                'private_key' => $key,
+                                                            ]) }}">
+                                                        <i
+                                                            class="fa
+                                                        fa-play-circle"></i>
                                                         نمایش ویدئو شماره {{ $contentIndex }}
                                                     </a>
                                                 </div>
@@ -114,7 +123,7 @@
 
             setInterval(() => {
                 if (!checkWatermark())
-                    window.location = "{{route('logout')}}";
+                    window.location = "{{ route('logout') }}";
             }, 500);
         })
 
@@ -127,7 +136,8 @@
 
         function checkWatermark() {
             var radnomTextContainer = $(".random-text").text();
-            if (radnomTextContainer == undefined || radnomTextContainer != "{{ $user_name }}"  || !$('.random-text').is(':visible') || $('.random-text').css('color') != 'rgb(0, 0, 0)') {
+            if (radnomTextContainer == undefined || radnomTextContainer != "{{ $user_name }}" || !$('.random-text').is(
+                    ':visible') || $('.random-text').css('color') != 'rgb(0, 0, 0)') {
                 return false;
             }
             return true;
