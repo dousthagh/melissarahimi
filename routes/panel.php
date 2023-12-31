@@ -147,6 +147,7 @@ Route::middleware(['auth'])->group(function () {
             Route::middleware(['auth.student'])->group(function () {
                 Route::get("/{user_level_category_id}", [LessonController::class, "GetLessonList"])->name("user_level_category.lesson.list");
                 Route::get("details/{userLevelCategoryId}/{lessonId}", [LessonController::class, "GetLessonDetails"])->name("user_level_category.lesson.details");
+                Route::get("show_video/{video_id}", [LessonController::class, "ShowVideo"])->name("user_level_category.lesson.video.show");
                 Route::get("get_address/{key}/{userLevelCategoryId}/{private_key}", [LessonController::class, "GetLessonFileAddressBySecretKey"])->name("user_level_category.lesson.files.address");
                 Route::post("send_sample_work", [LessonController::class, "SendSampleWork"])->name("user_level_category.lesson.sample_work.send");
                 Route::get("sample_work/{lessonId}/{userLevelCategoryId}", [LessonController::class, "MySampleWorkList"])->name("user_level_category.lesson.sample_work");
