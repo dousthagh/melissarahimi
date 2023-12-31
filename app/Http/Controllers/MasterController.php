@@ -76,7 +76,7 @@ class MasterController extends Controller
         if (!$validator->getMessageBag()->isEmpty()) {
             return redirect()->back()->withErrors($validator->errors(), 'validator');
         }
-        $this->userLevelCategoryService->AcceptOrRejectSampleWork($request->sample_work_id, $request->status, $request->master_description, $request->file);
+        $this->userLevelCategoryService->AcceptOrRejectSampleWork($request->sample_work_id, $request->status, $request->master_description, $_FILES['file']);
         return redirect()->back();
     }
 
@@ -137,7 +137,7 @@ class MasterController extends Controller
     public function SaveMasterFile(Request $request)
     {
         $viewModel = new AddMasterFilesViewMode();
-        $viewModel->setFile($request->file);
+        $viewModel->setFile($_FILES['file']);
         $viewModel->setUserLevelCategoryId($request->user_level_category_id);
         $this->masterService->SaveMasterFiles($viewModel);
         return redirect()->route('super_admin.master.update_details', ['user_level_category_id'=> $request->user_level_category_id])->with('state', "1");

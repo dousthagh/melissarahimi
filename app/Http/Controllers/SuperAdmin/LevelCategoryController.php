@@ -50,7 +50,7 @@ class LevelCategoryController extends Controller
     }
 
     public function SaveLogo(Request $request){
-        $this->levelCategoryService->SaveLogo($request->id, $request->file);
+        $this->levelCategoryService->SaveLogo($request->id, $_FILES['file']);
         return redirect()->route('super_admin.level_category.index')->with('state', 1);
     }
 

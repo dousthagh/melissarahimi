@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Services\bucket\BucketService;
 use App\Services\Panel\LessonContentService;
 use App\Services\SecretKeyService;
+use App\Services\Video\VideoService;
 use App\ViewModel\Lesson\LessonContent\SaveContentViewModel;
 use Illuminate\Http\Request;
 use function Webmozart\Assert\Tests\StaticAnalysis\length;
@@ -27,6 +29,7 @@ class LessonContentController extends Controller
     }
 
 
+
     public function SaveContent(Request $request){
         try {
             $viewModel = new SaveContentViewModel();
@@ -35,7 +38,7 @@ class LessonContentController extends Controller
             $viewModel->setContent($request->description);
             if(isset($request->id))
                 $viewModel->setId($request->id);
-            $viewModel->setFiles($request->file);
+            $viewModel->setFiles($_FILES['file']);
             $viewModel->setDeletedFilesId($request->delete_files);
 
 

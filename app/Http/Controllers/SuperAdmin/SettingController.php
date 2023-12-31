@@ -5,7 +5,6 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Services\Panel\SettingService;
-use App\Services\UploaderService;
 use App\ViewModel\Setting\SaveSettingViewModel;
 use Hamcrest\Core\Set;
 use Illuminate\Auth\Events\Logout;
@@ -20,30 +19,34 @@ class SettingController extends Controller
         $this->settingService = new SettingService();
     }
 
-    public function Index(){
-       $setting = $this->settingService->GetSetting();
+    public function Index()
+    {
+        $setting = $this->settingService->GetSetting();
         return view('panel.super_admin.setting', $setting);
     }
 
 
-    public function SaveSetting(Request $request){
+    public function SaveSetting(Request $request)
+    {
         $model = new SaveSettingViewModel();
-        if($request->logo != null)
-            $model->setLogo($request->logo);
+        if ($request->logo != null)
+            $model->setLogo($_FILES['logo']);
 
-        if($request->side_image != null)
-            $model->setSideImage($request->side_image);
+        if ($request->side_image != null)
+            $model->setSideImage($_FILES['side_image']);
 
         $this->settingService->SaveSetting($model);
 
         return redirect()->back()->with('state', '1');
     }
 
-    public function GetLogoFile(){
+    public function GetLogoFile()
+    {
         return $this->settingService->GetLogoFile();
     }
 
-    public function GetSideImageFile(){
+    public function GetSideImageFile()
+    {
         return $this->settingService->GetLogoFile();
     }
 }

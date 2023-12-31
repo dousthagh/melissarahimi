@@ -13,6 +13,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\SuperAdmin\StudentController;
 use App\Mail\ReduceLevelMail;
+use App\Services\bucket\BucketService;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +33,10 @@ Route::get('/side_image', [SettingController::class, "GetSideImageFile"])->name(
 
 Route::prefix('guest')->group(function () {
 
+    Route::get('/test',function(){
+        $s = new BucketService();
+        return $s->getFile("lesson/1/2.png");
+    });
     Route::get('/login', [UserController::class, "Login"])->name('login');
     Route::post('/login', [UserController::class, "DoLogin"])->name('do_login');
 
@@ -116,6 +121,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get("delete/{id}/{lesson_id}", [LessonContentController::class, "Delete"])->name("super_admin.lesson.content.delete");
                 Route::post('details/save', [LessonContentController::class, "SaveContent"])->name('super_admin.lesson.content.save');
             });
+
 
             Route::get('index/{level_category_id}', [\App\Http\Controllers\SuperAdmin\LessonController::class, "GetLessonsOfLevelCategoryId"])->name('super_admin.lesson.index');
             Route::get('details/{lesson_id}', [\App\Http\Controllers\SuperAdmin\LessonController::class, "GetLessonsDetails"])->name('super_admin.lesson.details');

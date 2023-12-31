@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LessonSampleWork;
-use App\Models\SecretKey;
 use App\Services\Panel\LessonService;
 use App\Services\Panel\UserLevelCategoryService;
 use App\Services\SecretKeyService;
@@ -66,7 +64,6 @@ class LessonController extends Controller
         return $this->lessonService->GetLessonFile($key, $userLevelCategoryId, $privateKey, false);
     }
 
-
     public function ShowSampleWorkImage($sampleWorkId, $isThumbnail)
     {
         return $this->lessonService->GetSampleWorkImage($sampleWorkId, $isThumbnail);
@@ -106,7 +103,7 @@ class LessonController extends Controller
         $viewModel->setDescription($request->description);
         $viewModel->setLessonId($request->lesson_id);
         $viewModel->setUserLevelCategoryId($request->user_level_category_id);
-        $viewModel->setFile($request->file);
+        $viewModel->setFile($_FILES['file']);
 
         $this->lessonService->SendSampleWork($viewModel);
         return redirect()->back();

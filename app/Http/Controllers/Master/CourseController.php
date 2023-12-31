@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Services\Panel\Course\CourseFileService;
 use App\Services\Panel\Course\CourseService;
 use App\Services\Panel\Course\CoursFileeService;
-use App\ViewModel\Lesson\LessonContent\SaveCourseFileViewModel;
-use App\ViewModel\Lesson\LessonContent\SaveCourseViewModel;
+use App\ViewModel\Course\SaveCourseFileViewModel;
+use App\ViewModel\Course\SaveCourseViewModel;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -72,7 +72,7 @@ class CourseController extends Controller
         $viewModel = new SaveCourseFileViewModel();
         $viewModel->setCourseId($request->course_id);
         $viewModel->setTitle($request->title);
-        $viewModel->setFile($request->file);
+        $viewModel->setFile($_FILES['file']);
         $this->courseFileService->SaveCourseFile($viewModel);
         return redirect()->back()->with('state', 1);
     }
