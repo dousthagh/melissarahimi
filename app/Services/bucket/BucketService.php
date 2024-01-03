@@ -61,7 +61,7 @@ class BucketService
     {
         $array = explode('.', $key);
         $type = $array[count($array) - 1];
-        
+
         switch (strtolower($type)) {
             case "png":
             case "jpg":
@@ -160,7 +160,6 @@ class BucketService
     private function getClient()
     {
         $ENDPOINT = 'https://s3.ir-thr-at1.arvanstorage.com';
-
         return new S3Client([
             'region' => env("AWS_DEFAULT_REGION"),
             'version' => '2006-03-01',

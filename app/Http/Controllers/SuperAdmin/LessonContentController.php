@@ -38,7 +38,8 @@ class LessonContentController extends Controller
             $viewModel->setContent($request->description);
             if(isset($request->id))
                 $viewModel->setId($request->id);
-            $viewModel->setFiles($_FILES['file']);
+            if(isset($_FILES['file']))
+                $viewModel->setFiles($_FILES['file']);
             $viewModel->setDeletedFilesId($request->delete_files);
 
 
