@@ -20,7 +20,7 @@
                 <input type="hidden" value="{{$userLevelCategoryId}}" name="user_level_category_id"/>
                 <div class="row">
                     <div class="col-lg-3 form-group">
-                        <input type="file" required name="file" id="input-file-now"
+                        <input type="file" name="file" id="input-file-now"
                                class="form-control dropify"/></div>
                     <div class="col-lg-7 form-group">
                         <textarea class="form-control" rows="4" id="input7" name="description"></textarea><span
@@ -110,17 +110,6 @@
 @section('script')
     <script>
         $(document).ready(function () {
-            $("#file-container").hide();
-
-            $("#status").change(function(){
-                var value=$(this).val()
-                if(value == "rejected"){
-                    $("#file-container").show();
-                }
-                else{
-                    $("#file-container").hide();
-                }
-            });
             // Basic
             $('.dropify').dropify();
             // Translated

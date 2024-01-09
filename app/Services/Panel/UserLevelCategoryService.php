@@ -190,13 +190,13 @@ class UserLevelCategoryService
     public function AcceptOrRejectSampleWork($sampleWorkId, $status, $description, $file = null)
     {
         if ($status == 'accepted') {
-            $this->AcceptSampleWork($sampleWorkId, $description);
+            $this->AcceptSampleWork($sampleWorkId, $description,$file);
         } else {
             $this->RejectSampleWork($sampleWorkId, $description, $file);
         }
     }
 
-    public function AcceptSampleWork($sampleWorkId, $description)
+    public function AcceptSampleWork($sampleWorkId, $description, $file)
     {
         $sampleWork = LessonSampleWork::join("user_level_categories", "user_level_categories.id", "=", "lesson_sample_works.user_level_category_id")
             ->join("user_level_categories as user_level_category_parent", "user_level_category_parent.id", "=", "user_level_categories.parent_id")
@@ -213,6 +213,14 @@ class UserLevelCategoryService
             abort(403);
         }
         DB::beginTransaction();
+        if ($file != null && $file['size'] > 0) {
+            $currentSampleWork = LessonSampleWork::find($sampleWorkId, ['user_level_category_id', 'lesson_id']);
+            $destinationPath = "sample_work" . "/" . $currentSampleWork->user_level_category_id . "/" . $currentSampleWork->lesson_id . "/" . $file['name'];
+            $uploadResult = $this->bucketService->uploadPartOfFile($file, $destinationPath);
+            if (!$uploadResult)
+                abort(500);
+            $masterFilePath = $file['name'];
+        }
         LessonSampleWork::where("id", $sampleWorkId)->update(["status" => "accepted", "master_description" => $description]);
         $passedLesson = new PassedLesson();
         $passedLesson->lesson_id = $sampleWork->lesson_id;
@@ -250,7 +258,7 @@ class UserLevelCategoryService
         }
         DB::beginTransaction();
         $masterFilePath = null;
-        if ($file != null) {
+        if ($file != null && $file['size'] > 0) {
             $currentSampleWork = LessonSampleWork::find($sampleWorkId, ['user_level_category_id', 'lesson_id']);
             $destinationPath = "sample_work" . "/" . $currentSampleWork->user_level_category_id . "/" . $currentSampleWork->lesson_id . "/" . $file['name'];
             $uploadResult = $this->bucketService->uploadPartOfFile($file, $destinationPath);
