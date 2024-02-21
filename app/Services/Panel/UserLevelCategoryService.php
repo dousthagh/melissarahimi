@@ -139,6 +139,7 @@ class UserLevelCategoryService
 
     public function GetMyStudentsWithUserLevelCategoryParent($userLevelCategoryId, $pageNumber = 1, GetUserLevelCategoryStudentFilterViewModel $categoryStudentFilterViewModel = null)
     {
+
         $result = UserLevelCategory::where("user_level_categories.id", $userLevelCategoryId)
             ->join("user_level_categories as user_level_category_child", "user_level_category_child.parent_id", "=", "user_level_categories.id")
             ->join("level_categories", "user_level_category_child.level_category_id", "=", "level_categories.id")
@@ -169,8 +170,7 @@ class UserLevelCategoryService
             if ($categoryStudentFilterViewModel->getLevelId())
                 $result = $result->where("levels.key", $categoryStudentFilterViewModel->getLevelId());
         }
-        $result = $result->paginate(10, ['*'], 'page', $pageNumber)
-            ->withQueryString();
+        $result = $result->get();
         return $result;
     }
 

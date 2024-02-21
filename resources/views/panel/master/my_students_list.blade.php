@@ -4,8 +4,8 @@
     <div class="row">
         <div class="col-lg-2 col-sm-4 col-xs-4">
             <a type="button" class="btn btn-primary btn-circle btn-sm" href="{{route('master.level_category.current_master_level_categories', ["userLevelCategoryParentId" => $parentUserLevelCategoryId])}}">
-                <i class="fa fa-list"></i> 
-            </a>        
+                <i class="fa fa-list"></i>
+            </a>
         </div>
     </div>
 </div>
@@ -118,9 +118,9 @@
                 @endforeach
                 </tbody>
             </table>
-            <div class="dataTables_paginate paging_simple_numbers" id="example23_paginate">
-                {{$students->links("pagination::bootstrap-4")}}
-            </div>
+{{--            <div class="dataTables_paginate paging_simple_numbers" id="example23_paginate">--}}
+{{--                {{$students->links("pagination::bootstrap-4")}}--}}
+{{--            </div>--}}
         </div>
     </div>
 @endsection
